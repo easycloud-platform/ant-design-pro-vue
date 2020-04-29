@@ -8,7 +8,7 @@
               <img :src="avatar()">
             </div>
             <div class="username">{{ nickname() }}</div>
-            <div class="bio">海纳百川，有容乃大</div>
+            <div class="bio">{{ email() }}</div>
           </div>
           <div class="account-center-detail">
             <p>
@@ -140,7 +140,7 @@ export default {
     this.getTeams()
   },
   methods: {
-    ...mapGetters(['nickname', 'avatar']),
+    ...mapGetters(['nickname', 'avatar', 'email']),
 
     getTeams () {
       this.$http.get('/workplace/teams').then(res => {

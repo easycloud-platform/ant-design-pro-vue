@@ -6,11 +6,13 @@ const getters = {
   avatar: state => state.user.avatar,
   nickname: state => state.user.name,
   welcome: state => state.user.welcome,
+  email: state => state.user.email,
   roles: state => state.user.roles,
-  userInfo: state => state.user.info,
+  userInfo: state => state.user,
   addRouters: state => state.permission.addRouters,
   multiTab: state => state.app.multiTab,
-  lang: state => state.i18n.lang
+  lang: state => state.i18n.lang,
+  appTitle: state => 'Mao Planet^'
 }
 
 export default getters
