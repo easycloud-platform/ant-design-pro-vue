@@ -82,16 +82,10 @@ export const asyncRouterMap = [
        {
         path: '/account',
         component: RouteView,
-        redirect: '/account/center',
+        redirect: '/account/settings',
         name: 'account',
         meta: { title: '个人中心', icon: 'user', keepAlive: true, permission: [ 'user' ] },
         children: [
-          {
-            path: '/account/center',
-            name: 'center',
-            component: () => import('@/views/account/center/Index'),
-            meta: { title: '我的面板', keepAlive: true, permission: [ 'user' ] }
-          },
           {
             path: '/account/settings',
             name: 'settings',
