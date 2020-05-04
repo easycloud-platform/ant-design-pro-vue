@@ -4,7 +4,7 @@ import store from './store'
 
 import NProgress from 'nprogress' // progress bar
 import '@/components/NProgress/nprogress.less' // progress bar custom style
-import notification from 'ant-design-vue/es/notification'
+// import notification from 'ant-design-vue/es/notification'
 import { setDocumentTitle, domTitle } from '@/utils/domUtil'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 
@@ -26,11 +26,11 @@ router.beforeEach((to, from, next) => {
         store
           .dispatch('GetInfo')
           .then(res => {
-            const roles = res.data.role
-            store.dispatch('GenerateRoutes', { roles }).then(() => {
+            // const roles = res.data.role
+            // store.dispatch('GenerateRoutes', { roles }).then(() => {
               // 根据roles权限生成可访问的路由表
               // 动态添加可访问路由表
-              router.addRoutes(store.getters.addRouters)
+              // router.addRoutes(store.getters.addRouters)
               // 请求带有 redirect 重定向时，登录自动重定向到该地址
               const redirect = decodeURIComponent(from.query.redirect || to.path)
               if (to.path === redirect) {
@@ -41,16 +41,16 @@ router.beforeEach((to, from, next) => {
                 next({ path: redirect })
               }
             })
-          })
-          .catch(() => {
-            notification.error({
-              message: '错误',
-              description: '请求用户信息失败，请重试'
-            })
-            store.dispatch('Logout').then(() => {
-              next({ path: '/user/login', query: { redirect: to.fullPath } })
-            })
-          })
+          // })
+          // .catch(() => {
+          //   notification.error({
+          //     message: '错误',
+          //     description: '请求用户信息失败，请重试'
+          //   })
+          //   store.dispatch('Logout').then(() => {
+          //     next({ path: '/user/login', query: { redirect: to.fullPath } })
+          //   })
+          // })
       } else {
         next()
       }

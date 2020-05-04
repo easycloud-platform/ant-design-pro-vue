@@ -92,8 +92,6 @@
       STable,
       Ellipsis,
       addUser
-      // CreateForm,
-      // StepByStepModal
     },
     data () {
       return {
@@ -198,13 +196,7 @@
             alert: { show: true, clear: () => { this.selectedRowKeys = [] } },
             rowSelection: {
               selectedRowKeys: this.selectedRowKeys,
-              onChange: this.onSelectChange,
-              getCheckboxProps: record => ({
-                props: {
-                  disabled: record.no === 'No 2', // Column configuration not to be checked
-                  name: record.no
-                }
-              })
+              onChange: this.onSelectChange
             }
           }
           this.optionAlertShow = true

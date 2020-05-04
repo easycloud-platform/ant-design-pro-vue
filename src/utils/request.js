@@ -12,6 +12,7 @@ const service = axios.create({
 })
 
 const err = (error) => {
+  console.log(error)
   if (error.response) {
     const data = error.response.data
     const token = Vue.ls.get(ACCESS_TOKEN)
@@ -49,6 +50,13 @@ service.interceptors.request.use(config => {
 
 // response interceptor
 service.interceptors.response.use((response) => {
+  if (response.data.code === 401) {
+    store.dispatch('Logout').then(() => {
+      setTimeout(() => {
+        window.location.reload()
+      }, 1500)
+    })
+  }
   return response.data
 }, err)
 

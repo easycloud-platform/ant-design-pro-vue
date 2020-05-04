@@ -54,7 +54,10 @@
             <a-input v-model="form.loginName" />
           </a-form-item>
           <a-form-item label="密码">
-            <a-input v-model="form.password" />
+            <a-input v-model="password" />
+          </a-form-item>
+           <a-form-item label="确认密码">
+            <a-input v-model="newPassword" />
           </a-form-item>
         </a-form>
       </a-tab-pane>
@@ -83,6 +86,8 @@ export default {
       visible: false,
       imageUrl: '',
       loading: false,
+      password: '',
+      newPassword: '',
       confirmLoading: false,
       form: {
         name: '',

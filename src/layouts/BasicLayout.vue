@@ -71,7 +71,7 @@ import GlobalHeader from '@/components/GlobalHeader'
 import GlobalFooter from '@/components/GlobalFooter'
 import SettingDrawer from '@/components/SettingDrawer'
 import { convertRoutes } from '@/utils/routeConvert'
-
+import { constantRouterMap } from '@/config/router.config'
 export default {
   name: 'BasicLayout',
   mixins: [mixin, mixinDevice],
@@ -92,7 +92,7 @@ export default {
   computed: {
     ...mapState({
       // 动态主路由
-      mainMenu: state => state.permission.addRouters
+      mainMenu: state => constantRouterMap
     }),
     contentPaddingLeft () {
       if (!this.fixSidebar || this.isMobile()) {
