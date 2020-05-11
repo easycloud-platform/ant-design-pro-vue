@@ -123,17 +123,25 @@ export default {
     },
     handleSubmit () {
        var that = this
+       if (that.password !== that.newPassword) {
+          that.$message.error('密码不同')
+          that.confirmLoading = false
+          return
+       } else {
+          that.form.password = that.password
+       }
        that.confirmLoading = true
        saveUser(this.form)
         .then((res) => {
-          console.log(res)
+          that.confirmLoading = false
+          if (res.code === 200) {
+            that.visible = false
+            that.$emit('ok', '')
+          } else {
+            that.$message.error(res.message)
+          }
         })
         .catch(err => this.requestFailed(err))
-        .finally(() => {
-           that.confirmLoading = false
-           that.visible = false
-           that.$emit('ok', '')
-        })
     },
     handleCancel () {
       this.form = {

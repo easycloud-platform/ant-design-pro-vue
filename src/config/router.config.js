@@ -108,62 +108,6 @@ export const constantRouterMap = [
           }
         ]
       },
-       // account
-       {
-        path: '/account',
-        component: RouteView,
-        redirect: '/account/settings',
-        name: 'account',
-        meta: { title: '个人中心', icon: 'user', keepAlive: true, permission: [ 'user' ] },
-        children: [
-          {
-            path: '/account/settings',
-            name: 'settings',
-            component: () => import('@/views/account/settings/Index'),
-            meta: { title: '个人设置', hideHeader: true, permission: [ 'user' ] },
-            redirect: '/account/settings/base',
-            hideChildrenInMenu: true,
-            children: [
-              {
-                path: '/account/settings/base',
-                name: 'BaseSettings',
-                component: () => import('@/views/account/settings/BaseSetting'),
-                meta: { title: '基本设置', hidden: true, permission: [ 'user' ] }
-              },
-              {
-                path: '/account/settings/security',
-                name: 'SecuritySettings',
-                component: () => import('@/views/account/settings/Security'),
-                meta: { title: '安全设置', hidden: true, keepAlive: true, permission: [ 'user' ] }
-              },
-              {
-                path: '/account/settings/custom',
-                name: 'CustomSettings',
-                component: () => import('@/views/account/settings/Custom'),
-                meta: { title: '个性化设置', hidden: true, keepAlive: true, permission: [ 'user' ] }
-              },
-              {
-                path: '/account/settings/binding',
-                name: 'BindingSettings',
-                component: () => import('@/views/account/settings/Binding'),
-                meta: { title: '账户绑定', hidden: true, keepAlive: true, permission: [ 'user' ] }
-              },
-              {
-                path: '/account/settings/notification',
-                name: 'NotificationSettings',
-                component: () => import('@/views/account/settings/Notification'),
-                meta: { title: '新消息通知', hidden: true, keepAlive: true, permission: [ 'user' ] }
-              }
-            ]
-          },
-          {
-            path: '/account/file',
-            name: 'file',
-            component: () => import('@/views/account/file/file'),
-            meta: { title: '文件管理', keepAlive: true, permission: [ 'user' ] }
-          }
-        ]
-      },
        // 系统监控
        {
         path: '/monitor',
@@ -172,19 +116,25 @@ export const constantRouterMap = [
         meta: { title: '系统监控', icon: 'form' },
         children: [
           {
-            path: '/monitor/log',
+            path: '/log',
             name: 'log',
             component: () => import('@/views/sys/monitor/log/log'),
             meta: { title: '在线日志', keepAlive: true }
           },
           {
-            path: '/monitor/task',
+            path: '/task',
             name: 'task',
             component: () => import('@/views/sys/monitor/task/task'),
             meta: { title: '定时任务', keepAlive: true }
           },
           {
-            path: '/monitor/index',
+            path: '/file',
+            name: 'file',
+            component: () => import('@/views/sys/file/file'),
+            meta: { title: '文件管理', keepAlive: true, permission: [ 'user' ] }
+          },
+          {
+            path: '/index',
             name: 'monitor',
             component: () => import('@/views/sys/monitor/monitor/monitor'),
             meta: { title: '系统监控管理', keepAlive: true }

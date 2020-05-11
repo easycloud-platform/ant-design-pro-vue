@@ -5,7 +5,7 @@
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
             <a-form-item label="类名">
-              <a-input placeholder="请输入" v-model="queryParam.jobName"/>
+              <a-input placeholder="请输入" v-model="queryParam.jobClassName"/>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -21,7 +21,7 @@
       <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
       <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
-          <a-menu-item  @click="handleDelete"><a-icon type="delete" />删除</a-menu-item>
+          <a-menu-item @click="handleDelete"><a-icon type="delete" />删除</a-menu-item>
         </a-menu>
         <a-button style="margin-left: 8px">
           批量操作 <a-icon type="down" />
@@ -38,22 +38,41 @@
       :rowSelection="options.rowSelection"
       showPagination="auto"
     >
+      <span slot="triggerState" slot-scope="triggerState">
+        <a-tag color="#108ee9">
+          {{ triggerState }}
+        </a-tag>
+      </span>
       <span slot="action" slot-scope="text, record">
-        <a @click="$refs.modal.edit(record)">编辑</a>
+        <a @click="$refs.editModal.edit(record)">编辑</a>
+        <a-divider type="vertical" />
+        <a @click="pause(record)">暂停</a>
+        <a-divider type="vertical" />
+        <a @click="resume(record)">恢复</a>
+        <a-divider type="vertical" />
+         <a @click="handleDelete(record)">删除</a>
       </span>
     </s-table>
+
+    <add-task ref="addModal" @ok="handleOk"></add-task>
+
+    <edit-task ref="editModal" @ok="handleOk"></edit-task>
 
   </a-card>
 </template>
 
 <script>
 import { STable, Ellipsis } from '@/components'
-import { getTaskList } from '@/api/task'
+import { getTaskList, pauseTask, resumeTask, deleteTask } from '@/api/task'
+import addTask from './module/addTask'
+import editTask from './module/editTask'
 export default {
   name: 'Task',
   components: {
     STable,
-    Ellipsis
+    Ellipsis,
+    addTask,
+    editTask
   },
   data () {
     return {
@@ -64,7 +83,7 @@ export default {
       advanced: false,
       // 查询参数
       queryParam: {
-        jobName: ''
+        jobClassName: ''
       },
       // 表头
       columns: [
@@ -77,12 +96,21 @@ export default {
           dataIndex: 'jobDescription'
         },
         {
-          title: '任务组名',
-          dataIndex: 'jobGroupName',
+          title: '状态',
+          dataIndex: 'triggerState',
+          scopedSlots: { customRender: 'triggerState' }
+        },
+        {
+          title: '下一执行时间',
+          dataIndex: 'nextFireTime'
+        },
+        {
+          title: 'cron表达式',
+          dataIndex: 'cronExpression',
           sorter: true
         }, {
           title: '操作',
-          width: '150px',
+          width: '200px',
           dataIndex: 'action',
           scopedSlots: { customRender: 'action' }
         }
@@ -131,12 +159,34 @@ export default {
       }
     },
     handleAdd () {
-      this.$refs.modal.add()
+      this.$refs.addModal.add()
     },
     handleEdit (record) {
-      this.$refs.modal.edit(record)
+      this.$refs.editModal.edit(record)
     },
-    handleDelete () {
+    pause (row) {
+      const that = this
+      pauseTask(row).then(res => {
+        if (res.code === 200) {
+          that.$message.success('操作成功')
+          that.handleOk()
+        } else {
+          that.$message.error(res.message)
+        }
+      })
+    },
+    resume (row) {
+      const that = this
+      resumeTask(row).then(res => {
+        if (res.code === 200) {
+          that.$message.success('操作成功')
+          that.handleOk()
+        } else {
+          that.$message.error(res.message)
+        }
+      })
+    },
+    handleDelete (row) {
       const that = this
       that.$confirm({
         title: '是否确认删除',
@@ -144,14 +194,14 @@ export default {
         okText: '确认',
         cancelText: '取消',
         onOk () {
-          // deleteRole(that.selectedRowKeys).then(res => {
-          //   if (res.code === 200) {
-          //     that.$message.success('操作成功')
-          //     that.handleOk()
-          //   } else {
-          //     that.$message.error(res.message)
-          //   }
-          // })
+          deleteTask(row).then(res => {
+            if (res.code === 200) {
+              that.$message.success('操作成功')
+              that.handleOk()
+            } else {
+              that.$message.error(res.message)
+            }
+          })
         }
       })
     },
@@ -167,18 +217,6 @@ export default {
     }
   },
   watch: {
-    /*
-      'selectedRows': function (selectedRows) {
-        this.needTotalList = this.needTotalList.map(item => {
-          return {
-            ...item,
-            total: selectedRows.reduce( (sum, val) => {
-              return sum + val[item.dataIndex]
-            }, 0)
-          }
-        })
-      }
-      */
   }
 }
 </script>
