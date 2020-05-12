@@ -39,8 +39,13 @@
       :rowSelection="options.rowSelection"
       showPagination="auto"
     >
-      <span slot="action" slot-scope="text, record">
-         <a @click="open(record)">下载文件</a>
+     <span slot="kind" slot-scope="text, record">
+          <a-tag color="#f50">
+            {{record.kind}}
+          </a-tag>
+      </span>
+      <span slot="viewPath" slot-scope="text, record">
+         <a @click="open(record)">{{record.viewPath}}</a>
       </span>
     </s-table>
 
@@ -78,7 +83,8 @@ export default {
         },
         {
           title: '类型',
-          dataIndex: 'kind'
+          dataIndex: 'kind',
+          scopedSlots: { customRender: 'kind' }
         },
         {
           title: '大小',
@@ -86,16 +92,12 @@ export default {
         },
         {
           title: '预览路径',
-          dataIndex: 'viewPath'
+          dataIndex: 'viewPath',
+          scopedSlots: { customRender: 'viewPath' }
         },
         {
           title: '上传时间',
           dataIndex: 'createDate'
-        }, {
-          title: '操作',
-          width: '100px',
-          dataIndex: 'action',
-          scopedSlots: { customRender: 'action' }
         }
       ],
       // 加载数据方法 必须为 Promise 对象

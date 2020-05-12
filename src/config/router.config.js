@@ -61,18 +61,6 @@ export const constantRouterMap = [
             component: () => import('@/views/dashboard/Analysis'),
             meta: { title: '分析页', keepAlive: false, permission: [ 'dashboard' ] }
           }
-          // // 外部链接
-          // {
-          //   path: 'https://www.baidu.com/',
-          //   name: 'Monitor',
-          //   meta: { title: '监控页（外部）', target: '_blank' }
-          // },
-          // {
-          //   path: 'test-work',
-          //   name: 'TestWork',
-          //   component: () => import('@/views/dashboard/TestWork'),
-          //   meta: { title: '测试功能', keepAlive: true, permission: [ 'dashboard' ] }
-          // }
         ]
       },
       // system
@@ -88,12 +76,12 @@ export const constantRouterMap = [
             component: () => import('@/views/sys/user/user'),
             meta: { title: '用户管理', keepAlive: true }
           },
-          {
-            path: '/sys/dept',
-            name: 'dept',
-            component: () => import('@/views/sys/dept/dept'),
-            meta: { title: '组织机构', keepAlive: true }
-          },
+          // {
+          //   path: '/sys/dept',
+          //   name: 'dept',
+          //   component: () => import('@/views/sys/dept/dept'),
+          //   meta: { title: '组织机构', keepAlive: true }
+          // },
           {
             path: '/sys/role',
             name: 'role',
@@ -108,6 +96,39 @@ export const constantRouterMap = [
           }
         ]
       },
+       // flowable
+       {
+        path: '/flowable',
+        redirect: '/flowable/design',
+        component: PageView,
+        meta: { title: '流程管理', icon: 'form' },
+        children: [
+          {
+            path: '/flowable/models',
+            name: 'models',
+            component: () => import('@/views/flow/design/design'),
+            meta: { title: '模型管理', keepAlive: true }
+          },
+          {
+            path: '/flowable/procDef',
+            name: 'procDef',
+            component: () => import('@/views/flow/design/design'),
+            meta: { title: '流程定义', keepAlive: true }
+          },
+          {
+            path: '/flowable/procIns',
+            name: 'procIns',
+            component: () => import('@/views/flow/design/design'),
+            meta: { title: '流程实例', keepAlive: true }
+          },
+          {
+            path: '/flowable/design',
+            name: 'Design',
+            component: () => import('@/views/flow/design/design'),
+            meta: { title: '模型设计', keepAlive: true }
+          }
+        ]
+      },
        // 系统监控
        {
         path: '/monitor',
@@ -116,25 +137,25 @@ export const constantRouterMap = [
         meta: { title: '系统监控', icon: 'form' },
         children: [
           {
-            path: '/log',
+            path: '/monitor/log',
             name: 'log',
             component: () => import('@/views/sys/monitor/log/log'),
             meta: { title: '在线日志', keepAlive: true }
           },
           {
-            path: '/task',
+            path: '/monitor/task',
             name: 'task',
             component: () => import('@/views/sys/monitor/task/task'),
             meta: { title: '定时任务', keepAlive: true }
           },
           {
-            path: '/file',
+            path: '/monitor/file',
             name: 'file',
             component: () => import('@/views/sys/file/file'),
             meta: { title: '文件管理', keepAlive: true, permission: [ 'user' ] }
           },
           {
-            path: '/index',
+            path: '/monitor/index',
             name: 'monitor',
             component: () => import('@/views/sys/monitor/monitor/monitor'),
             meta: { title: '系统监控管理', keepAlive: true }
