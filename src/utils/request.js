@@ -14,10 +14,10 @@ const service = axios.create({
 const err = (error) => {
   if (error.response) {
     if (error.response.status === 401) {
-      notification.error({	      
-         message: '登录失效',	       
+      notification.error({
+         message: '登录失效',
          description: '请重新登录'
-      })	     
+      })
       store.dispatch('Logout').then(() => {
         setTimeout(() => {
           window.location.reload()
