@@ -12,7 +12,7 @@
       <a-upload
             name="file"
             :show-upload-list="false"
-            action="http://127.0.0.1:9180/v1/api/file/upload"
+            action="http://106.15.102.223:9180/v1/api/file/upload"
             :before-upload="beforeUpload"
             @change="handleChange"
             >

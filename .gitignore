@@ -19,3 +19,6 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+ant-design-pro-vue.iml
+package-lock.json
+public/._logo.png

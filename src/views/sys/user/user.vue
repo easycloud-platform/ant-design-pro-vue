@@ -125,15 +125,7 @@
             title: '用户名',
             dataIndex: 'name',
             customRender: (text, row, index) => {
-              if (index < 4) {
                 return <a href="javascript:;">{text}</a>
-              }
-              return {
-                children: <a href="javascript:;">{text}</a>,
-                attrs: {
-                  colSpan: 5
-                }
-              }
             }
           },
           {
@@ -151,18 +143,17 @@
           },
           {
             title: '邮箱',
-            dataIndex: 'email',
-            scopedSlots: { customRender: 'email' }
+            dataIndex: 'email'
           },
           {
             title: '更新时间',
-            dataIndex: 'updateDate',
-            sorter: true
+            dataIndex: 'updateDate'
           },
           {
+            fixed: 'right',
+            width: 100,
             title: '操作',
             dataIndex: 'action',
-            width: '150px',
             scopedSlots: { customRender: 'action' }
           }
         ],

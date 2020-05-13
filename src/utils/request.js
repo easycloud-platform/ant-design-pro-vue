@@ -16,16 +16,10 @@ const err = (error) => {
   if (error.response) {
     const data = error.response.data
     const token = Vue.ls.get(ACCESS_TOKEN)
-    if (error.response.status === 403) {
-      notification.error({
-        message: 'Forbidden',
-        description: data.message
-      })
-    }
     if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
       notification.error({
-        message: 'Unauthorized',
-        description: 'Authorization verification failed'
+        message: '登录失效',
+        description: '请重新登录'
       })
       if (token) {
         store.dispatch('Logout').then(() => {
@@ -36,7 +30,7 @@ const err = (error) => {
       }
     }
   }
-  return Promise.reject(error)
+  return error.response.data
 }
 
 // request interceptor

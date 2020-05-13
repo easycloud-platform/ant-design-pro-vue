@@ -162,7 +162,7 @@ export const constantRouterMap = [
           },
           // 外部链接
           {
-            path: 'http://127.0.0.1:9180/doc.html',
+            path: 'http://106.15.102.223:9180/doc.html',
             name: 'doc',
             meta: { title: '接口文档', target: '_blank' }
           }
