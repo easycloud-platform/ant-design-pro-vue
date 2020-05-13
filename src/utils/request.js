@@ -13,10 +13,22 @@ const service = axios.create({
 
 const err = (error) => {
   if (error.response) {
-    notification.error({
-      message: '服务器出小差了',
-      description: '请稍后再试'
-    })
+    if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
+      notification.error({	      
+         message: '登录失效',	       
+         description: '请重新登录'
+      })	     
+      store.dispatch('Logout').then(() => {
+        setTimeout(() => {
+          window.location.reload()
+        }, 1500)
+      })
+    } else {
+      notification.error({
+        message: '服务器出小差了',
+        description: '请稍后再试'
+      })
+    }
   }
   // return error.response.data
 }
@@ -36,11 +48,6 @@ service.interceptors.response.use((response) => {
     notification.error({
       message: '身份验证失败',
       description: response.data.message
-    })
-    store.dispatch('Logout').then(() => {
-      setTimeout(() => {
-        window.location.reload()
-      }, 1500)
     })
   }
   return response.data
