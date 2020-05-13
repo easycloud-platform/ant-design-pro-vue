@@ -13,7 +13,7 @@ const service = axios.create({
 
 const err = (error) => {
   if (error.response) {
-    if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
+    if (error.response.status === 401) {
       notification.error({	      
          message: '登录失效',	       
          description: '请重新登录'
