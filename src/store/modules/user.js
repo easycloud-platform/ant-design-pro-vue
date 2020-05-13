@@ -38,8 +38,10 @@ const user = {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
           const result = response.message
-          Vue.ls.set(ACCESS_TOKEN, result)
-          commit('SET_TOKEN', result)
+          if (response.code === 200) {
+            Vue.ls.set(ACCESS_TOKEN, result)
+            commit('SET_TOKEN', result)
+          }
           resolve()
         }).catch(error => {
           reject(error)

@@ -12,25 +12,13 @@ const service = axios.create({
 })
 
 const err = (error) => {
-  console.log(error)
   if (error.response) {
-    const data = error.response.data
-    const token = Vue.ls.get(ACCESS_TOKEN)
-    if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
-      notification.error({
-        message: '登录失效',
-        description: '请重新登录'
-      })
-      if (token) {
-        store.dispatch('Logout').then(() => {
-          setTimeout(() => {
-            window.location.reload()
-          }, 1500)
-        })
-      }
-    }
+    notification.error({
+      message: '服务器出小差了',
+      description: '请稍后再试'
+    })
   }
-  return error.response.data
+  // return error.response.data
 }
 
 // request interceptor
@@ -45,6 +33,10 @@ service.interceptors.request.use(config => {
 // response interceptor
 service.interceptors.response.use((response) => {
   if (response.data.code === 401) {
+    notification.error({
+      message: '身份验证失败',
+      description: response.data.message
+    })
     store.dispatch('Logout').then(() => {
       setTimeout(() => {
         window.location.reload()

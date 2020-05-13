@@ -174,7 +174,9 @@ export default {
           loginParams[!state.loginType ? 'email' : 'loginName'] = values.username
           loginParams.password = values.password
           Login(loginParams)
-            .then((res) => this.loginSuccess(res))
+            .then((res) => {
+              this.loginSuccess(res)
+            })
             .catch(err => this.requestFailed(err))
             .finally(() => {
               state.loginBtn = false
@@ -251,13 +253,8 @@ export default {
       }, 1000)
       this.isLoginError = false
     },
-    requestFailed (err) {
+    requestFailed () {
       this.isLoginError = true
-      this.$notification['error']({
-        message: '错误',
-        description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
-        duration: 4
-      })
     }
   }
 }
