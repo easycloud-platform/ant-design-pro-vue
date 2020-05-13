@@ -175,7 +175,10 @@ export default {
           loginParams.password = values.password
           Login(loginParams)
             .then((res) => {
-              this.loginSuccess(res)
+              console.log(res)
+              if (res.code === 200) {
+                 this.loginSuccess(res)
+              }
             })
             .catch(err => this.requestFailed(err))
             .finally(() => {

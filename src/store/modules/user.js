@@ -42,7 +42,7 @@ const user = {
             Vue.ls.set(ACCESS_TOKEN, result)
             commit('SET_TOKEN', result)
           }
-          resolve()
+          resolve(response)
         }).catch(error => {
           reject(error)
         })
