@@ -104,21 +104,15 @@ export const constantRouterMap = [
         meta: { title: '流程管理', icon: 'form' },
         children: [
           {
-            path: '/flowable/models',
-            name: 'models',
-            component: () => import('@/views/flow/design/design'),
-            meta: { title: '模型管理', keepAlive: true }
-          },
-          {
             path: '/flowable/procDef',
             name: 'procDef',
-            component: () => import('@/views/flow/design/design'),
+            component: () => import('@/views/flow/procDef/procDef'),
             meta: { title: '流程定义', keepAlive: true }
           },
           {
             path: '/flowable/procIns',
             name: 'procIns',
-            component: () => import('@/views/flow/design/design'),
+            component: () => import('@/views/flow/procIns/procIns'),
             meta: { title: '流程实例', keepAlive: true }
           },
           {
@@ -133,7 +127,7 @@ export const constantRouterMap = [
        {
         path: '/monitor',
         redirect: '/monitor/log',
-        component: PageView,
+        component: RouteView,
         meta: { title: '系统监控', icon: 'form' },
         children: [
           {
@@ -154,13 +148,6 @@ export const constantRouterMap = [
             component: () => import('@/views/sys/file/file'),
             meta: { title: '文件管理', keepAlive: true, permission: [ 'user' ] }
           },
-          {
-            path: '/monitor/index',
-            name: 'monitor',
-            component: () => import('@/views/sys/monitor/monitor/monitor'),
-            meta: { title: '系统监控管理', keepAlive: true }
-          },
-          // 外部链接
           {
             path: 'http://106.15.102.223:9180/doc.html',
             name: 'doc',
