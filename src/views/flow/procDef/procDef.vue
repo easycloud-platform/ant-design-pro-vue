@@ -5,11 +5,6 @@
       :bordered="false">
 
       <div slot="extra">
-        <a-radio-group v-model="status">
-          <a-radio-button value="all">全部</a-radio-button>
-          <a-radio-button value="processing">激活</a-radio-button>
-          <a-radio-button value="waiting">挂起</a-radio-button>
-        </a-radio-group>
         <a-input-search style="margin-left: 16px; width: 272px;" />
       </div>
 
@@ -29,7 +24,7 @@
           <div slot="actions">
             <a-dropdown>
               <a-menu slot="overlay">
-                <a-menu-item><a>查看图片</a></a-menu-item>
+                <a-menu-item><a @click="startProcDef(item)">发起流程</a></a-menu-item>
                 <a-menu-item><a @click="deleteProcDef(item)">删除</a></a-menu-item>
               </a-menu>
               <a>更多<a-icon type="down"/></a>
@@ -59,7 +54,7 @@
 </template>
 
 <script>
-import { getProcDefList, updateProcDef, deleteProcDef } from '@/api/procDef'
+import { getProcDefList, updateProcDef, deleteProcDef, startProcDef } from '@/api/procDef'
 export default {
   name: 'ProcDef',
   components: {
@@ -70,12 +65,13 @@ export default {
       queryParam: {
       },
       data: [],
-      state: '',
       procDef: {},
-      status: 'all'
+      status: 'all',
+      user: {}
     }
   },
   created () {
+    this.user = this.$store.getters.userInfo.info
     this.initData()
   },
   methods: {
@@ -105,11 +101,22 @@ export default {
     update () {
         updateProcDef(this.state, this.procDef.id).then(res => {
             if (res.code === 200) {
-                this.initData()
                 this.$message.success('操作成功')
             } else {
                 this.$message.error(res.message)
             }
+            this.initData()
+        })
+    },
+    startProcDef (e) {
+        this.loading = true
+        startProcDef(this.user.id, e.key).then(res => {
+            if (res.code === 200) {
+                this.$message.success('操作成功')
+            } else {
+                this.$message.error(res.message)
+            }
+            this.initData()
         })
     },
     deleteProcDef (e) {

@@ -87,7 +87,7 @@ export default {
           scopedSlots: { customRender: 'kind' }
         },
         {
-          title: '大小',
+          title: '大小（字节）',
           dataIndex: 'size'
         },
         {

@@ -6,46 +6,44 @@
 
       <div slot="extra">
         <a-radio-group v-model="status">
-          <a-radio-button value="all">全部</a-radio-button>
-          <a-radio-button value="processing">进行中</a-radio-button>
-          <a-radio-button value="waiting">等待中</a-radio-button>
+          <a-radio-button value="processing" @click="getRunProcIns()">正在运行</a-radio-button>
+          <a-radio-button value="waiting" @click="getHistoryProcIns()">已结束</a-radio-button>
         </a-radio-group>
         <a-input-search style="margin-left: 16px; width: 272px;" />
       </div>
 
-      <div class="operate">
-        <a-button type="dashed" style="width: 100%" icon="plus" @click="$refs.taskForm.add()">添加</a-button>
-      </div>
-
-      <a-list size="large" :pagination="{showSizeChanger: true, showQuickJumper: true, pageSize: 5, total: 50}">
+      <a-list size="large"  :loading="loading" :pagination="{showSizeChanger: true, showQuickJumper: true, pageSize: 5, total: 50}">
         <a-list-item :key="index" v-for="(item, index) in data">
-          <a-list-item-meta :description="item.description">
-            <a-avatar slot="avatar" size="large" shape="square" :src="item.avatar"/>
-            <a slot="title">{{ item.title }}</a>
+          <a-list-item-meta :description="item.processInstanceId">
+            <a slot="title">{{ item.name }}</a>
           </a-list-item-meta>
           <div slot="actions">
-            <a @click="edit(item)">编辑</a>
+            <a v-if="item.suspensionState==1" @click="pause(item)">挂起</a>
+            <a v-if="item.suspensionState==2" @click="alive(item)">激活</a>
           </div>
           <div slot="actions">
             <a-dropdown>
               <a-menu slot="overlay">
-                <a-menu-item><a>编辑</a></a-menu-item>
-                <a-menu-item><a>删除</a></a-menu-item>
+                <a-menu-item><a @click="deleteProcIns(item)">删除</a></a-menu-item>
               </a-menu>
               <a>更多<a-icon type="down"/></a>
             </a-dropdown>
           </div>
           <div class="list-content">
             <div class="list-content-item">
-              <span>Owner</span>
-              <p>{{ item.owner }}</p>
+              <span>executionId</span>
+              <p>{{ item.executionId }}</p>
             </div>
             <div class="list-content-item">
               <span>开始时间</span>
-              <p>{{ item.startAt }}</p>
+              <p>{{ item.startTime }}</p>
             </div>
             <div class="list-content-item">
-              <a-progress :percent="item.progress.value" :status="!item.progress.status ? null : item.progress.status" style="width: 180px" />
+              <span>流程状态</span>
+              <p>
+                <a-tag color="#108ee9" v-if="item.suspensionState==1">激活</a-tag>
+                <a-tag color="#f50" v-if="item.suspensionState==2">挂起</a-tag>
+              </p>
             </div>
           </div>
         </a-list-item>
@@ -55,77 +53,92 @@
 </template>
 
 <script>
-import HeadInfo from '@/components/tools/HeadInfo'
-
-const data = []
-data.push({
-  title: 'Alipay',
-  avatar: 'https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png',
-  description: '那是一种内在的东西， 他们到达不了，也无法触及的',
-  owner: '付晓晓',
-  startAt: '2018-07-26 22:44',
-  progress: {
-    value: 90
-  }
-})
-data.push({
-  title: 'Angular',
-  avatar: 'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png',
-  description: '希望是一个好东西，也许是最好的，好东西是不会消亡的',
-  owner: '曲丽丽',
-  startAt: '2018-07-26 22:44',
-  progress: {
-    value: 54
-  }
-})
-data.push({
-  title: 'Ant Design',
-  avatar: 'https://gw.alipayobjects.com/zos/rmsportal/dURIMkkrRFpPgTuzkwnB.png',
-  description: '生命就像一盒巧克力，结果往往出人意料',
-  owner: '林东东',
-  startAt: '2018-07-26 22:44',
-  progress: {
-    value: 66
-  }
-})
-data.push({
-  title: 'Ant Design Pro',
-  avatar: 'https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png',
-  description: '城镇中有那么多的酒馆，她却偏偏走进了我的酒馆',
-  owner: '周星星',
-  startAt: '2018-07-26 22:44',
-  progress: {
-    value: 30
-  }
-})
-data.push({
-  title: 'Bootstrap',
-  avatar: 'https://gw.alipayobjects.com/zos/rmsportal/siCrBXXhmvTQGWPNLBow.png',
-  description: '那时候我只会想自己想要什么，从不想自己拥有什么',
-  owner: '吴加好',
-  startAt: '2018-07-26 22:44',
-  progress: {
-    status: 'exception',
-    value: 100
-  }
-})
-
+import { getProcInsRunningList, getProcInsHistoryList, activeProcIns,
+handUpProcIns, deleteProcIns } from '@/api/procIns'
 export default {
-  name: 'StandardList',
+  name: 'ProcIns',
   components: {
-    HeadInfo
   },
   data () {
     return {
-      data,
-      status: 'all'
+      loading: true,
+      queryParam: {
+      },
+      data: [],
+      procIns: {},
+      status: 'processing'
     }
   },
+  created () {
+    this.getRunProcIns()
+  },
   methods: {
-    edit (record) {
-      console.log('record', record)
-      // mockdata
-      record.taskName = '测试'
+    getRunProcIns () {
+        this.loading = true
+        getProcInsRunningList(this.queryParam)
+          .then(res => {
+              if (res.code === 200) {
+                  this.data = res.data
+              } else {
+                  this.$message.error(res.message)
+              }
+              this.loading = false
+        })
+    },
+    getHistoryProcIns () {
+        this.loading = true
+        getProcInsHistoryList(this.queryParam)
+          .then(res => {
+              if (res.code === 200) {
+                  this.data = res.data
+              } else {
+                  this.$message.error(res.message)
+              }
+              this.loading = false
+        })
+    },
+    alive (e) {
+        this.loading = true
+        activeProcIns(e.id).then(res => {
+            if (res.code === 200) {
+                this.$message.success('操作成功')
+            } else {
+                this.$message.error(res.message)
+            }
+            this.getRunProcIns()
+        })
+    },
+    pause (e) {
+        this.loading = true
+        handUpProcIns(e.id).then(res => {
+            if (res.code === 200) {
+                this.$message.success('操作成功')
+            } else {
+                this.$message.error(res.message)
+            }
+            this.getRunProcIns()
+        })
+    },
+    deleteProcIns (e) {
+        const that = this
+        that.$confirm({
+          title: '是否确认删除',
+          content: '谨慎操作',
+          okText: '确认',
+          cancelText: '取消',
+          onOk () {
+            deleteProcIns(e.id).then(res => {
+              that.loading = true
+              if (res.code === 200) {
+                that.$message.success('操作成功')
+              } else {
+                that.$message.error(res.message)
+              }
+              that.getRunProcIns()
+              that.getHistoryProcIns()
+            })
+          }
+        })
     }
   }
 }
