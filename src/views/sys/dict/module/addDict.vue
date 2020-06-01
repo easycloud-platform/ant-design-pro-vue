@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    title="角色设置"
+    title="字典设置"
     :width="640"
     :visible="visible"
     :confirmLoading="confirmLoading"
@@ -9,14 +9,14 @@
   >
       <a-spin :spinning="confirmLoading">
       <a-form :form="form" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-item label="姓名">
+        <a-form-item label="字典编号">
+          <a-input v-model="form.code" />
+        </a-form-item>
+        <a-form-item label="字典显示值">
           <a-input v-model="form.name" />
         </a-form-item>
-        <a-form-item label="简介">
-          <a-input v-model="form.describe" />
-        </a-form-item>
-        <a-form-item label="备注">
-          <a-input v-model="form.remarks" />
+        <a-form-item label="字典数值">
+          <a-input v-model="form.value" />
         </a-form-item>
       </a-form>
     </a-spin>
@@ -24,10 +24,10 @@
 </template>
 
 <script>
+import { saveDict } from '@/api/dict'
 import notification from 'ant-design-vue/es/notification'
-import { saveRole } from '@/api/role'
 export default {
-  name: 'AddRole',
+  name: 'AddDict',
   data () {
     return {
       tabPosition: 'left',
@@ -45,8 +45,8 @@ export default {
       confirmLoading: false,
       form: {
         name: '',
-        describe: '',
-        remarks: ''
+        value: '',
+        code: ''
       }
     }
   },
@@ -60,16 +60,16 @@ export default {
       this.visible = true
       this.form = {
         name: '',
-        describe: '',
-        remarks: ''
+        value: '',
+        code: ''
       }
     },
     handleSubmit () {
        var that = this
        that.confirmLoading = true
-       saveRole(this.form)
+       saveDict(this.form)
         .then((res) => {
-          if (res.code === -1) {
+            if (res.code === -1) {
                 notification.error({
                     message: '错误信息',
                     description: res.message
@@ -86,8 +86,8 @@ export default {
     handleCancel () {
       this.form = {
         name: '',
-        describe: '',
-        remarks: ''
+        value: '',
+        code: ''
       }
       this.visible = false
     }

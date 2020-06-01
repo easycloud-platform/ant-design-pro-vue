@@ -49,6 +49,17 @@ service.interceptors.response.use((response) => {
       message: '身份验证失败',
       description: response.data.message
     })
+    store.dispatch('Logout').then(() => {
+      setTimeout(() => {
+        window.location.reload()
+      }, 1500)
+    })
+  }
+  if (response.data.code === 500) {
+    notification.error({
+      message: '错误信息',
+      description: response.data.message
+    })
   }
   return response.data
 }, err)

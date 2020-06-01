@@ -12,7 +12,7 @@
         <a-button type="dashed" style="width: 100%" icon="plus" @click="$refs.taskForm.add()">部署流程</a-button>
       </div>
 
-      <a-list size="large"  :loading="loading" :pagination="{showSizeChanger: true, showQuickJumper: true, pageSize: 5, total: 50}">
+      <a-list size="large"  :loading="loading" :pagination="{showSizeChanger: false, showQuickJumper: true, pageSize: pageSize, total: total}">
         <a-list-item :key="index" v-for="(item, index) in data">
           <a-list-item-meta :description="item.category">
             <a slot="title">{{ item.name }}</a>
@@ -64,6 +64,8 @@ export default {
       loading: true,
       queryParam: {
       },
+      pageSize: 5,
+      total: 1,
       data: [],
       procDef: {},
       status: 'all',
@@ -80,8 +82,7 @@ export default {
           .then(res => {
               if (res.code === 200) {
                   this.data = res.data
-              } else {
-                  this.$message.error(res.message)
+                  this.total = res.data.length
               }
               this.loading = false
         })
@@ -102,8 +103,6 @@ export default {
         updateProcDef(this.state, this.procDef.id).then(res => {
             if (res.code === 200) {
                 this.$message.success('操作成功')
-            } else {
-                this.$message.error(res.message)
             }
             this.initData()
         })
@@ -113,8 +112,6 @@ export default {
         startProcDef(this.user.id, e.key).then(res => {
             if (res.code === 200) {
                 this.$message.success('操作成功')
-            } else {
-                this.$message.error(res.message)
             }
             this.initData()
         })
@@ -131,8 +128,6 @@ export default {
               that.loading = true
               if (res.code === 200) {
                 that.$message.success('操作成功')
-              } else {
-                that.$message.error(res.message)
               }
               that.initData()
             })

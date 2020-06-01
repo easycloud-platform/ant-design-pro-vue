@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    title="个人信息"
+    title="用户设置"
     :width="640"
     :visible="visible"
     :confirmLoading="confirmLoading"
@@ -17,7 +17,7 @@
                 list-type="picture-card"
                 class="avatar-uploader"
                 :show-upload-list="false"
-                action="http://106.15.102.223:9180/v1/api/file/upload"
+                action="http://106.15.102.223:9180/v1/api/sys/file/upload"
                 :before-upload="beforeUpload"
                 @change="handleChange"
               >
@@ -69,6 +69,7 @@
 </template>
 
 <script>
+import notification from 'ant-design-vue/es/notification'
 import { saveUser } from '@/api/user'
 export default {
   name: 'AddUser',
@@ -133,15 +134,19 @@ export default {
        that.confirmLoading = true
        saveUser(this.form)
         .then((res) => {
-          that.confirmLoading = false
-          if (res.code === 200) {
-            that.visible = false
-            that.$emit('ok', '')
-          } else {
-            that.$message.error(res.message)
-          }
+          if (res.code === -1) {
+                notification.error({
+                    message: '错误信息',
+                    description: res.message
+                })
+            } else {
+                that.visible = false
+                that.$emit('ok', '')
+            }
         })
-        .catch(err => this.requestFailed(err))
+        .finally(() => {
+           that.confirmLoading = false
+        })
     },
     handleCancel () {
       this.form = {

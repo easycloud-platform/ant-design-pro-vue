@@ -78,8 +78,9 @@ export default {
       // 表头
       columns: [
         {
-          title: '存储路径',
-          dataIndex: 'localPath'
+          title: '预览路径',
+          dataIndex: 'viewPath',
+          scopedSlots: { customRender: 'viewPath' }
         },
         {
           title: '类型',
@@ -89,11 +90,6 @@ export default {
         {
           title: '大小（字节）',
           dataIndex: 'size'
-        },
-        {
-          title: '预览路径',
-          dataIndex: 'viewPath',
-          scopedSlots: { customRender: 'viewPath' }
         },
         {
           title: '上传时间',
@@ -164,8 +160,6 @@ export default {
             if (res.code === 200) {
               that.$message.success('操作成功')
               that.handleOk()
-            } else {
-              that.$message.error(res.message)
             }
           })
         }

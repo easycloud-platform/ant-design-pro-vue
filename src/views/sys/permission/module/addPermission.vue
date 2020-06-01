@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    title="权限信息"
+    title="权限设置"
     :width="640"
     :visible="visible"
     :confirmLoading="confirmLoading"
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import notification from 'ant-design-vue/es/notification'
 import { savePermission } from '@/api/permission'
 export default {
   name: 'AddRole',
@@ -41,8 +42,6 @@ export default {
       visible: false,
       imageUrl: '',
       loading: false,
-      password: '',
-      newPassword: '',
       confirmLoading: false,
       form: {
         permissionName: '',
@@ -70,13 +69,18 @@ export default {
        that.confirmLoading = true
        savePermission(this.form)
         .then((res) => {
-          console.log(res)
+         if (res.code === -1) {
+                notification.error({
+                    message: '错误信息',
+                    description: res.message
+                })
+            } else {
+                that.visible = false
+                that.$emit('ok', '')
+            }
         })
-        .catch(err => this.requestFailed(err))
         .finally(() => {
            that.confirmLoading = false
-           that.visible = false
-           that.$emit('ok', '')
         })
     },
     handleCancel () {

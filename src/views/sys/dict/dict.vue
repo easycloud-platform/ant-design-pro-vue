@@ -4,7 +4,7 @@
       <a-form layout="inline">
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
-            <a-form-item label="权限名称">
+            <a-form-item label="角色名称">
               <a-input placeholder="请输入" v-model="queryParam.name"/>
             </a-form-item>
           </a-col>
@@ -43,20 +43,20 @@
       </span>
     </s-table>
 
-    <add-permission ref="modal" @ok="handleOk"></add-permission>
+    <add-dict ref="modal" @ok="handleOk"></add-dict>
 
   </a-card>
 </template>
 
 <script>
 import { STable, Ellipsis } from '@/components'
-import addPermission from './module/addPermission'
-import { getPermissionList, deletePermission } from '@/api/permission'
+import addDict from './module/addDict'
+import { getDictList, deleteDict } from '@/api/dict'
 export default {
-  name: 'Permission',
+  name: 'Dict',
   components: {
     STable,
-    addPermission,
+    addDict,
     Ellipsis
   },
   data () {
@@ -73,8 +73,16 @@ export default {
       // 表头
       columns: [
         {
-          title: '权限名称',
-          dataIndex: 'permissionName'
+          title: '字典编号',
+          dataIndex: 'code'
+        },
+        {
+          title: '字典显示值',
+          dataIndex: 'name'
+        },
+        {
+          title: '字典数值',
+          dataIndex: 'value'
         },
         {
           title: '更新时间',
@@ -90,7 +98,7 @@ export default {
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         console.log('loadData.parameter', parameter)
-        return getPermissionList(Object.assign(parameter, this.queryParam))
+        return getDictList(Object.assign(parameter, this.queryParam))
           .then(res => {
           return res.data
         })
@@ -144,10 +152,12 @@ export default {
         okText: '确认',
         cancelText: '取消',
         onOk () {
-          deletePermission(that.selectedRowKeys).then(res => {
+          deleteDict(that.selectedRowKeys).then(res => {
             if (res.code === 200) {
               that.$message.success('操作成功')
               that.handleOk()
+            } else {
+              that.$message.error(res.message)
             }
           })
         }
@@ -165,6 +175,18 @@ export default {
     }
   },
   watch: {
+    /*
+      'selectedRows': function (selectedRows) {
+        this.needTotalList = this.needTotalList.map(item => {
+          return {
+            ...item,
+            total: selectedRows.reduce( (sum, val) => {
+              return sum + val[item.dataIndex]
+            }, 0)
+          }
+        })
+      }
+      */
   }
 }
 </script>

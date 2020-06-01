@@ -217,8 +217,6 @@
               if (res.code === 200) {
                 that.$message.success('操作成功')
                 that.handleOk()
-              } else {
-                that.$message.error(res.message)
               }
             })
           }
@@ -229,8 +227,6 @@
            if (res.code === 200) {
               this.$message.success('操作成功')
               this.handleOk()
-            } else {
-              this.$message.error(res.message)
             }
         })
       },
