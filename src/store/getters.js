@@ -12,7 +12,7 @@ const getters = {
   addRouters: state => state.permission.addRouters,
   multiTab: state => state.app.multiTab,
   lang: state => state.i18n.lang,
-  appTitle: state => 'Mao Planet^'
+  appTitle: state => 'EasyBoot'
 }
 
 export default getters

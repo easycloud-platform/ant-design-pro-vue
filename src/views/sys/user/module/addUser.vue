@@ -9,7 +9,7 @@
   >
     <a-tabs default-active-key="1" :tab-position="tabPosition">
       <a-tab-pane key="1" tab="基本资料">
-         <a-spin :spinning="confirmLoading">
+        <a-spin :spinning="confirmLoading">
           <a-form :form="form" :label-col="labelCol" :wrapper-col="wrapperCol">
             <a-form-item label="头像">
               <a-upload
@@ -56,7 +56,7 @@
           <a-form-item label="密码">
             <a-input v-model="password" />
           </a-form-item>
-           <a-form-item label="确认密码">
+          <a-form-item label="确认密码">
             <a-input v-model="newPassword" />
           </a-form-item>
         </a-form>

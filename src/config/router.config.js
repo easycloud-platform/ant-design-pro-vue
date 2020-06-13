@@ -168,6 +168,50 @@ export const constantRouterMap = [
             meta: { title: '文件管理', keepAlive: true, permission: [ 'user' ] }
           }
         ]
+      },
+      {
+        path: '/app',
+        redirect: '/app/cat/level',
+        component: RouteView,
+        meta: { title: '猫星球', icon: 'gold' },
+        children: [
+          {
+            path: '/app/article',
+            name: 'article',
+            component: () => import('@/views/app/article/article'),
+            meta: { title: '文章管理', keepAlive: true }
+          },
+          {
+            path: '/app/vaccin',
+            name: 'vaccin',
+            component: () => import('@/views/app/vaccin/vaccin'),
+            meta: { title: '疫苗管理', keepAlive: true }
+          },
+          {
+            path: '/app/store',
+            name: 'store',
+            component: () => import('@/views/app/store/store'),
+            meta: { title: '猫店管理', keepAlive: true }
+          },
+          {
+            path: '/app/cat/cat',
+            name: 'cat',
+            component: () => import('@/views/app/cat/cat/cat'),
+            meta: { title: '猫咪管理' }
+          },
+          {
+            path: '/app/cat/level',
+            name: 'level',
+            component: () => import('@/views/app/cat/level/level'),
+            meta: { title: '等级设置' }
+          },
+          {
+            path: '/app/cat/breed',
+            name: 'breed',
+            component: () => import('@/views/app/cat/breed/breed'),
+            meta: { title: '品种介绍' }
+          }
+        ]
       }
     ]
   },
