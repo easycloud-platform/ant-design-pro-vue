@@ -15,7 +15,9 @@ import './utils/filter' // global filter
 import './components/global.less'
 import { Dialog } from '@/components'
 import { FormModel } from 'ant-design-vue'
-
+import VueQuillEditor from 'vue-quill-editor'
+// use
+Vue.use(VueQuillEditor)
 Vue.config.productionTip = false
 
 // mount axios Vue.$http and this.$http

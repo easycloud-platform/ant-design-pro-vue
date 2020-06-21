@@ -4,7 +4,7 @@
       <a-form layout="inline">
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
-            <a-form-item label="权限名称">
+            <a-form-item label="猫咪昵称">
               <a-input placeholder="请输入" v-model="queryParam.name"/>
             </a-form-item>
           </a-col>
@@ -51,7 +51,7 @@
 <script>
 import { STable, Ellipsis } from '@/components'
 import addCat from './module/addCat'
-import { getPermissionList, deletePermission } from '@/api/permission'
+import { getCatList, deleteCat } from '@/api/app/cat'
 export default {
   name: 'Cat',
   components: {
@@ -73,8 +73,28 @@ export default {
       // 表头
       columns: [
         {
-          title: '权限名称',
-          dataIndex: 'permissionName'
+          title: '猫咪昵称',
+          dataIndex: 'name'
+        },
+        {
+          title: '介绍',
+          dataIndex: 'info'
+        },
+        {
+          title: '体重',
+          dataIndex: 'weight'
+        },
+        {
+          title: '年龄',
+          dataIndex: 'age'
+        },
+        {
+          title: '性别',
+          dataIndex: 'sex'
+        },
+        {
+          title: '市场价',
+          dataIndex: 'price'
         },
         {
           title: '更新时间',
@@ -90,7 +110,7 @@ export default {
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         console.log('loadData.parameter', parameter)
-        return getPermissionList(Object.assign(parameter, this.queryParam))
+        return getCatList(Object.assign(parameter, this.queryParam))
           .then(res => {
           return res.data
         })
@@ -144,7 +164,7 @@ export default {
         okText: '确认',
         cancelText: '取消',
         onOk () {
-          deletePermission(that.selectedRowKeys).then(res => {
+          deleteCat(that.selectedRowKeys).then(res => {
             if (res.code === 200) {
               that.$message.success('操作成功')
               that.handleOk()

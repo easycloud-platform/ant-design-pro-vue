@@ -1,7 +1,7 @@
 <template>
   <a-modal
     title="文章管理"
-    :width="640"
+    :width="1200"
     :visible="visible"
     :confirmLoading="confirmLoading"
     @ok="handleSubmit"
@@ -35,10 +35,10 @@
           <a-input v-model="form.author" />
         </a-form-item>
         <a-form-item label="简介">
-          <a-input v-model="form.info" />
+          <a-input v-model="form.info" type="textarea" />
         </a-form-item>
          <a-form-item label="内容">
-          <a-input v-model="form.content" type="textarea" />
+          <quill-editor ref="myTextEditor" v-model="form.content"></quill-editor>
         </a-form-item>
       </a-form>
     </a-spin>
@@ -46,6 +46,8 @@
 </template>
 
 <script>
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
 import notification from 'ant-design-vue/es/notification'
 import { saveArticle } from '@/api/app/article'
 export default {
@@ -122,10 +124,11 @@ export default {
       }
       if (info.file.status === 'done') {
         if (info.file.response.code === 200) {
-          this.form.avatar = info.file.response.message
+          this.form.cover = info.file.response.data
         } else {
           this.$message.error('文件上传服务出小差了')
         }
+        this.loading = false
       }
     },
     beforeUpload (file) {

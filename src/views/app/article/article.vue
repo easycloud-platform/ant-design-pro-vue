@@ -38,6 +38,19 @@
       :rowSelection="options.rowSelection"
       showPagination="auto"
     >
+      <span slot="cover" slot-scope="cover">
+        <a-avatar :src="cover" shape="square"/>
+      </span>
+      <span slot="appTitle" slot-scope="text, record">
+        <a-popover :title="record.title">
+          <template slot="content">
+            <div v-html="record.content"></div>
+          </template>
+          <a-button type="link">
+            {{record.title}}
+          </a-button>
+        </a-popover>
+      </span>
       <span slot="action" slot-scope="text, record">
         <a @click="$refs.modal.edit(record)">编辑</a>
       </span>
@@ -73,18 +86,22 @@ export default {
       // 表头
       columns: [
         {
+          title: '封面',
+          dataIndex: 'cover',
+          scopedSlots: { customRender: 'cover' }
+        },
+        {
           title: '标题',
-          dataIndex: 'title'
+          dataIndex: 'appTitle',
+          scopedSlots: { customRender: 'appTitle' }
         },
         {
           title: '简介',
-          dataIndex: 'info',
-          sorter: true
+          dataIndex: 'info'
         },
         {
           title: '更新时间',
-          dataIndex: 'updateDate',
-          sorter: true
+          dataIndex: 'updateDate'
         }, {
           title: '操作',
           width: '150px',

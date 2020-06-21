@@ -4,8 +4,18 @@
       <a-form layout="inline">
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
-            <a-form-item label="权限名称">
+            <a-form-item label="店铺名称">
               <a-input placeholder="请输入" v-model="queryParam.name"/>
+            </a-form-item>
+          </a-col>
+          <a-col :md="8" :sm="24">
+            <a-form-item label="负责人名字">
+              <a-input placeholder="请输入" v-model="queryParam.masterName"/>
+            </a-form-item>
+          </a-col>
+           <a-col :md="8" :sm="24">
+            <a-form-item label="联系电话">
+              <a-input placeholder="请输入" v-model="queryParam.masterPhone"/>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -35,6 +45,7 @@
       :columns="columns"
       :data="loadData"
       :alert="options.alert"
+      :scroll="{ x: 1500, y: 300 }"
       :rowSelection="options.rowSelection"
       showPagination="auto"
     >
@@ -51,7 +62,7 @@
 <script>
 import { STable, Ellipsis } from '@/components'
 import addStore from './module/addStore'
-import { getPermissionList, deletePermission } from '@/api/permission'
+import { getStoreList, deleteStore } from '@/api/app/store'
 export default {
   name: 'Store',
   components: {
@@ -68,21 +79,56 @@ export default {
       advanced: false,
       // 查询参数
       queryParam: {
-        name: ''
+        name: '',
+        masterName: '',
+        masterPhone: ''
       },
       // 表头
       columns: [
         {
-          title: '权限名称',
-          dataIndex: 'permissionName'
+          title: '店铺名称',
+          fixed: 'left',
+          width: 150,
+          dataIndex: 'name'
+        },
+        {
+          title: '店铺介绍',
+          width: '200px',
+          dataIndex: 'info'
+        },
+         {
+          title: '关注数量',
+          width: '130px',
+          dataIndex: 'followNum'
+        },
+        {
+          title: '地址',
+          width: '200px',
+          dataIndex: 'addr'
+        },
+        {
+          title: '负责人名称',
+          width: '150px',
+          dataIndex: 'masterName'
+        },
+        {
+          title: '负责人电话',
+          width: '150px',
+          dataIndex: 'masterPhone'
+        },
+        {
+          title: '负责人微信',
+          width: '150px',
+          dataIndex: 'masterWechat'
         },
         {
           title: '更新时间',
-          dataIndex: 'updateDate',
-          sorter: true
+          width: '150px',
+          dataIndex: 'updateDate'
         }, {
           title: '操作',
-          width: '150px',
+          fixed: 'right',
+          width: 150,
           dataIndex: 'action',
           scopedSlots: { customRender: 'action' }
         }
@@ -90,7 +136,7 @@ export default {
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         console.log('loadData.parameter', parameter)
-        return getPermissionList(Object.assign(parameter, this.queryParam))
+        return getStoreList(Object.assign(parameter, this.queryParam))
           .then(res => {
           return res.data
         })
@@ -144,7 +190,7 @@ export default {
         okText: '确认',
         cancelText: '取消',
         onOk () {
-          deletePermission(that.selectedRowKeys).then(res => {
+          deleteStore(that.selectedRowKeys).then(res => {
             if (res.code === 200) {
               that.$message.success('操作成功')
               that.handleOk()
