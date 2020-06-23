@@ -4,7 +4,7 @@
       <a-form layout="inline">
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
-            <a-form-item label="权限名称">
+            <a-form-item label="等级名称">
               <a-input placeholder="请输入" v-model="queryParam.name"/>
             </a-form-item>
           </a-col>
@@ -51,7 +51,7 @@
 <script>
 import { STable, Ellipsis } from '@/components'
 import addLevel from './module/addLevel'
-import { getPermissionList, deletePermission } from '@/api/permission'
+import { getCatLevelList, deleteCatLevel } from '@/api/app/catLevel'
 export default {
   name: 'Level',
   components: {
@@ -73,8 +73,12 @@ export default {
       // 表头
       columns: [
         {
-          title: '权限名称',
-          dataIndex: 'permissionName'
+          title: '等级名称',
+          dataIndex: 'name'
+        },
+        {
+          title: '介绍信息',
+          dataIndex: 'info'
         },
         {
           title: '更新时间',
@@ -90,7 +94,7 @@ export default {
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         console.log('loadData.parameter', parameter)
-        return getPermissionList(Object.assign(parameter, this.queryParam))
+        return getCatLevelList(Object.assign(parameter, this.queryParam))
           .then(res => {
           return res.data
         })
@@ -144,7 +148,7 @@ export default {
         okText: '确认',
         cancelText: '取消',
         onOk () {
-          deletePermission(that.selectedRowKeys).then(res => {
+          deleteCatLevel(that.selectedRowKeys).then(res => {
             if (res.code === 200) {
               that.$message.success('操作成功')
               that.handleOk()

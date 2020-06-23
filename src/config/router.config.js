@@ -182,12 +182,6 @@ export const constantRouterMap = [
             meta: { title: '文章管理', keepAlive: true }
           },
           {
-            path: '/app/vaccin',
-            name: 'vaccin',
-            component: () => import('@/views/app/vaccin/vaccin'),
-            meta: { title: '疫苗管理', keepAlive: true }
-          },
-          {
             path: '/app/store',
             name: 'store',
             component: () => import('@/views/app/store/store'),
