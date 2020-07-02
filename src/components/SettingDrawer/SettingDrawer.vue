@@ -148,13 +148,13 @@
           </div>
         </div>
         <a-divider />
-        <!-- <div :style="{ marginBottom: '24px' }">
+        <div :style="{ marginBottom: '24px' }" v-if="!production">
           <a-button
             @click="doCopy"
             icon="copy"
             block
           >拷贝设置</a-button>
-        </div> -->
+        </div>
       </div>
       <div class="setting-drawer-index-handle" @click="toggle" slot="handle">
         <a-icon type="setting" v-if="!visible"/>
@@ -170,6 +170,7 @@ import SettingItem from './SettingItem'
 import config from '@/config/defaultSettings'
 import { updateTheme, updateColorWeak, colorList } from './settingConfig'
 import { mixin, mixinDevice } from '@/utils/mixin'
+import config from '@/config/defaultSettings'
 
 export default {
   components: {
@@ -179,6 +180,7 @@ export default {
   mixins: [mixin, mixinDevice],
   data () {
     return {
+      production: config.production,
       visible: false,
       colorList
     }
