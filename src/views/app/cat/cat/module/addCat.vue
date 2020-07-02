@@ -29,6 +29,9 @@
          <a-form-item label="体重">
           <a-input v-model="form.weight" />
         </a-form-item>
+         <a-form-item label="所属商店">
+          <a-input v-model="form.weight" />
+        </a-form-item>
          <a-form-item label="年龄">
           <a-input v-model="form.age" />
         </a-form-item>

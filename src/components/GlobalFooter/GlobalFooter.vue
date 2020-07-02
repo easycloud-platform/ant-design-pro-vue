@@ -1,11 +1,5 @@
 <template>
   <div class="footer">
-    <div class="links">
-      <a
-        href="https://pro.loacg.com/"
-        target="_blank"
-      >EasyBoot Center</a>
-    </div>
     <div class="copyright">
       Copyright
       <a-icon type="copyright" /> 2020 <span>李前</span>

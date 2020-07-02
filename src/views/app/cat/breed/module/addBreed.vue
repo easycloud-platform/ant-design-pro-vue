@@ -7,19 +7,18 @@
     @ok="handleSubmit"
     @cancel="handleCancel"
   >
-      <a-spin :spinning="confirmLoading">
+    <a-spin :spinning="confirmLoading">
       <a-form :form="form" :label-col="labelCol" :wrapper-col="wrapperCol">
         <a-form-item label="品种图片">
           <a-upload
-              name="file"
-              :multiple="true"
-              action="http://106.15.102.223:9180/v1/api/sys/file/upload"
-              :before-upload="beforeUpload"
-              @change="handleChange"
-            >
-              <a-button> <a-icon type="upload" /> Click to Upload </a-button>
+            name="file"
+            :multiple="true"
+            action="http://106.15.102.223:9180/v1/api/sys/file/upload"
+            :before-upload="beforeUpload"
+            @change="handleChange">
+            <a-button> <a-icon type="upload" /> Click to Upload </a-button>
           </a-upload>
-         </a-form-item>
+        </a-form-item>
         <a-form-item label="品种">
           <a-input v-model="form.name" />
         </a-form-item>

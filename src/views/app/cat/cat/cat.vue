@@ -39,7 +39,11 @@
       showPagination="auto"
     >
       <span slot="action" slot-scope="text, record">
-        <a @click="$refs.modal.edit(record)">编辑</a>
+        <a @click="$refs.modal.edit(record)">编辑资料</a>
+        <a-divider type="vertical" />
+        <a @click="$refs.modal.edit(record)">疫苗记录</a>
+        <a-divider type="vertical" />
+        <a @click="$refs.modal.edit(record)">驱虫记录</a>
       </span>
     </s-table>
 
@@ -102,7 +106,7 @@ export default {
           sorter: true
         }, {
           title: '操作',
-          width: '150px',
+          width: '250px',
           dataIndex: 'action',
           scopedSlots: { customRender: 'action' }
         }
