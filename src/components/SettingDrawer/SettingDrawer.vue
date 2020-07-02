@@ -41,7 +41,7 @@
           </div>
         </div>
 
-        <div :style="{ marginBottom: '24px' }">
+        <div :style="{ marginBottom: '24px' }" v-if="!production">
           <h3 class="setting-drawer-index-title">主题色</h3>
 
           <div style="height: 20px">
