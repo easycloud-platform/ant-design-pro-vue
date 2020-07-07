@@ -3,6 +3,7 @@
     title="品种设置"
     :width="640"
     :visible="visible"
+    style="top: 20px;"
     :confirmLoading="confirmLoading"
     @ok="handleSubmit"
     @cancel="handleCancel"
@@ -18,6 +19,11 @@
             @change="handleChange">
             <a-button> <a-icon type="upload" /> Click to Upload </a-button>
           </a-upload>
+        </a-form-item>
+        <a-form-item>
+          <a-checkable-tag v-for="item in photo" :key="item">
+            {{ item }}
+          </a-checkable-tag>
         </a-form-item>
         <a-form-item label="品种">
           <a-input v-model="form.name" />
@@ -98,10 +104,11 @@ export default {
       imageUrl: '',
       loading: false,
       confirmLoading: false,
+      photo: [],
       form: {
         name: '',
         info: '',
-        photo: [],
+        photo: '',
         life: '',
         price: 0.0,
         weight: 0.0,
@@ -126,18 +133,37 @@ export default {
       this.visible = true
       this.mdl = record
       this.form = JSON.parse(JSON.stringify(record))
+      this.photo = JSON.parse(this.form.photo)
     },
     add () {
       this.visible = true
+      this.photo = []
       this.form = {
-        permissionName: '',
-        actions: '',
+        name: '',
+        info: '',
+        photo: '',
+        life: '',
+        price: 0.0,
+        weight: 0.0,
+        height: 0.0,
+        origin: '',
+        featureGood: 0,
+        featureBad: 0,
+        stickyDegree: 0,
+        motorDegree: 0,
+        barkingDegree: 0,
+        adaptationDegree: 0,
+        friendlyDegree: 0,
+        foodSize: 0,
+        trainingDegree: 0,
+        bodyOdorDegree: 0,
         remarks: ''
       }
     },
     handleSubmit () {
        var that = this
        that.confirmLoading = true
+       that.form.photo = JSON.stringify(that.photo)
        saveCatBreed(this.form)
         .then((res) => {
          if (res.code === -1) {
@@ -157,7 +183,23 @@ export default {
     handleCancel () {
       this.form = {
         name: '',
-        describe: '',
+        info: '',
+        photo: '',
+        life: '',
+        price: 0.0,
+        weight: 0.0,
+        height: 0.0,
+        origin: '',
+        featureGood: 0,
+        featureBad: 0,
+        stickyDegree: 0,
+        motorDegree: 0,
+        barkingDegree: 0,
+        adaptationDegree: 0,
+        friendlyDegree: 0,
+        foodSize: 0,
+        trainingDegree: 0,
+        bodyOdorDegree: 0,
         remarks: ''
       }
       this.visible = false
@@ -169,7 +211,7 @@ export default {
       }
       if (info.file.status === 'done') {
         if (info.file.response.code === 200) {
-          this.form.photo.push(info.file.response.data)
+          this.photo.push(info.file.response.data)
         } else {
           this.$message.error('文件上传服务出小差了')
         }

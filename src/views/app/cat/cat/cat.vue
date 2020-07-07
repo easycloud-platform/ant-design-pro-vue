@@ -10,8 +10,8 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <span class="table-page-search-submitButtons">
-             <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-             <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
+              <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
+              <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
             </span>
           </a-col>
         </a-row>
@@ -21,7 +21,7 @@
       <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
       <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
-          <a-menu-item  @click="handleDelete"><a-icon type="delete" />删除</a-menu-item>
+          <a-menu-item @click="handleDelete"><a-icon type="delete" />删除</a-menu-item>
         </a-menu>
         <a-button style="margin-left: 8px">
           批量操作 <a-icon type="down" />
@@ -35,6 +35,7 @@
       :columns="columns"
       :data="loadData"
       :alert="options.alert"
+      :scroll="{ x: 1500, y: 300 }"
       :rowSelection="options.rowSelection"
       showPagination="auto"
     >
@@ -77,37 +78,56 @@ export default {
       // 表头
       columns: [
         {
-          title: '猫咪昵称',
-          dataIndex: 'name'
+          title: '猫咪',
+          dataIndex: 'name',
+          fixed: 'left',
+          width: '100px'
+        },
+        {
+          title: '商店',
+          width: '100px',
+          dataIndex: 'store.name'
+        },
+        {
+          title: '品种',
+          width: '100px',
+          dataIndex: 'catBreed.name'
         },
         {
           title: '介绍',
+          width: '100px',
           dataIndex: 'info'
         },
         {
           title: '体重',
+          width: '100px',
           dataIndex: 'weight'
         },
         {
           title: '年龄',
+          width: '100px',
           dataIndex: 'age'
         },
         {
           title: '性别',
+          width: '100px',
           dataIndex: 'sex'
         },
         {
           title: '市场价',
+          width: '100px',
           dataIndex: 'price'
         },
         {
           title: '更新时间',
           dataIndex: 'updateDate',
+          width: '200px',
           sorter: true
         }, {
           title: '操作',
-          width: '250px',
+          width: '240px',
           dataIndex: 'action',
+          fixed: 'right',
           scopedSlots: { customRender: 'action' }
         }
       ],

@@ -49,6 +49,9 @@
       :rowSelection="options.rowSelection"
       showPagination="auto"
     >
+      <span slot="logo" slot-scope="logo">
+        <a-avatar :src="logo" shape="square"/>
+      </span>
       <span slot="action" slot-scope="text, record">
         <a @click="$refs.modal.edit(record)">编辑</a>
       </span>
@@ -85,6 +88,13 @@ export default {
       },
       // 表头
       columns: [
+        {
+          title: 'LOGO',
+          dataIndex: 'logo',
+          fixed: 'left',
+          width: 90,
+          scopedSlots: { customRender: 'logo' }
+        },
         {
           title: '店铺名称',
           fixed: 'left',
@@ -123,7 +133,7 @@ export default {
         },
         {
           title: '更新时间',
-          width: '150px',
+          width: '200px',
           dataIndex: 'updateDate'
         }, {
           title: '操作',

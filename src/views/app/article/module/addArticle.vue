@@ -2,12 +2,13 @@
   <a-modal
     title="文章管理"
     :width="1200"
+    style="top: 20px;"
     :visible="visible"
     :confirmLoading="confirmLoading"
     @ok="handleSubmit"
     @cancel="handleCancel"
   >
-      <a-spin :spinning="confirmLoading">
+    <a-spin :spinning="confirmLoading">
       <a-form :form="form" :label-col="labelCol" :wrapper-col="wrapperCol">
         <a-form-item label="封面">
           <a-upload
@@ -36,6 +37,7 @@
             placeholder="选择文章类别"
             option-filter-prop="children"
             style="width: 200px"
+            v-model="form.category"
             @change="handleArticleTypeChange"
           >
             <a-select-option v-for="i in articleTypeList" :key="i.value">
@@ -49,7 +51,7 @@
         <!-- <a-form-item label="简介">
           <a-input v-model="form.info" type="textarea" />
         </a-form-item> -->
-         <a-form-item label="内容">
+        <a-form-item label="内容">
           <quill-editor ref="myTextEditor" v-model="form.content"></quill-editor>
         </a-form-item>
       </a-form>

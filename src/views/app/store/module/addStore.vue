@@ -2,6 +2,7 @@
   <a-modal
     title="店铺设置"
     :width="640"
+    style="top: 20px;"
     :visible="visible"
     :confirmLoading="confirmLoading"
     @ok="handleSubmit"
