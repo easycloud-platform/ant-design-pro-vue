@@ -8,6 +8,13 @@ export function getDictList (parameter) {
   })
 }
 
+export function getDictListByCode (parameter) {
+  return axios({
+    url: '/sys/dict/code/' + parameter,
+    method: 'get'
+  })
+}
+
 export function saveDict (parameter) {
   return axios({
     url: '/sys/dict/',

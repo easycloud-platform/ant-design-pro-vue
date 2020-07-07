@@ -31,12 +31,24 @@
         <a-form-item label="标题">
           <a-input v-model="form.title" />
         </a-form-item>
+        <a-form-item label="类别">
+          <a-select
+            placeholder="选择文章类别"
+            option-filter-prop="children"
+            style="width: 200px"
+            @change="handleArticleTypeChange"
+          >
+            <a-select-option v-for="i in articleTypeList" :key="i.value">
+              {{ i.name }}
+            </a-select-option>
+          </a-select>
+        </a-form-item>
         <a-form-item label="作者">
           <a-input v-model="form.author" />
         </a-form-item>
-        <a-form-item label="简介">
+        <!-- <a-form-item label="简介">
           <a-input v-model="form.info" type="textarea" />
-        </a-form-item>
+        </a-form-item> -->
          <a-form-item label="内容">
           <quill-editor ref="myTextEditor" v-model="form.content"></quill-editor>
         </a-form-item>
@@ -50,6 +62,7 @@ import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import notification from 'ant-design-vue/es/notification'
 import { saveArticle } from '@/api/app/article'
+import { getDictListByCode } from '@/api/dict'
 export default {
   name: 'AddArticle',
   data () {
@@ -63,11 +76,13 @@ export default {
         xs: { span: 24 },
         sm: { span: 12 }
       },
+      articleTypeList: [],
       visible: false,
       imageUrl: '',
       loading: false,
       confirmLoading: false,
       form: {
+        category: '',
         title: '',
         info: '',
         cover: '',
@@ -76,7 +91,15 @@ export default {
       }
     }
   },
+  mounted () {
+    this.initData()
+  },
   methods: {
+    initData () {
+      getDictListByCode('app-article-type').then((res) => {
+        this.articleTypeList = res.data
+      })
+    },
     edit (record) {
       this.visible = true
       this.mdl = record
@@ -85,10 +108,16 @@ export default {
     add () {
       this.visible = true
       this.form = {
-        permissionName: '',
-        actions: '',
-        remarks: ''
+        category: '',
+        title: '',
+        info: '',
+        cover: '',
+        content: '',
+        author: ''
       }
+    },
+    handleArticleTypeChange (value) {
+      this.form.category = value
     },
     handleSubmit () {
        var that = this
@@ -111,9 +140,12 @@ export default {
     },
     handleCancel () {
       this.form = {
-        name: '',
-        describe: '',
-        remarks: ''
+        category: '',
+        title: '',
+        info: '',
+        cover: '',
+        content: '',
+        author: ''
       }
       this.visible = false
     },

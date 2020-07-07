@@ -9,6 +9,21 @@
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
+            <a-form-item label="类别">
+              <a-select
+                placeholder="选择文章类别"
+                option-filter-prop="children"
+                style="width: 200px"
+                allowClear=true
+                @change="handleArticleTypeChange"
+              >
+                <a-select-option v-for="i in articleTypeList" :key="i.value">
+                  {{ i.name }}
+                </a-select-option>
+              </a-select>
+            </a-form-item>
+          </a-col>
+          <a-col :md="8" :sm="24">
             <span class="table-page-search-submitButtons">
              <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
              <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
@@ -65,6 +80,7 @@
 import { STable, Ellipsis } from '@/components'
 import addArticle from './module/addArticle'
 import { getArticleList, deleteArticle } from '@/api/app/article'
+import { getDictListByCode } from '@/api/dict'
 export default {
   name: 'Article',
   components: {
@@ -81,7 +97,8 @@ export default {
       advanced: false,
       // 查询参数
       queryParam: {
-        title: ''
+        title: '',
+        category: ''
       },
       // 表头
       columns: [
@@ -96,8 +113,8 @@ export default {
           scopedSlots: { customRender: 'appTitle' }
         },
         {
-          title: '简介',
-          dataIndex: 'info'
+          title: '类别',
+          dataIndex: 'categoryName'
         },
         {
           title: '更新时间',
@@ -109,6 +126,7 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ],
+      articleTypeList: [],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         console.log('loadData.parameter', parameter)
@@ -132,8 +150,17 @@ export default {
   },
   created () {
     this.tableOption()
+    this.getArticleTypeList()
   },
   methods: {
+    getArticleTypeList () {
+       getDictListByCode('app-article-type').then((res) => {
+        this.articleTypeList = res.data
+      })
+    },
+    handleArticleTypeChange (value) {
+      this.queryParam.category = value
+    },
     tableOption () {
       if (!this.optionAlertShow) {
         this.options = {
