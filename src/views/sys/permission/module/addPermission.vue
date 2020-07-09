@@ -7,13 +7,20 @@
     @ok="handleSubmit"
     @cancel="handleCancel"
   >
-      <a-spin :spinning="confirmLoading">
+    <a-spin :spinning="confirmLoading">
       <a-form :form="form" :label-col="labelCol" :wrapper-col="wrapperCol">
         <a-form-item label="权限名称">
           <a-input v-model="form.permissionName" />
         </a-form-item>
         <a-form-item label="权限动作">
-          <a-input v-model="form.actions" />
+          <a-input v-model="form.perCode" />
+        </a-form-item>
+        <a-form-item label="角色">
+          <a-select v-model="form.roleId" style="width: 100%" placeholder="选择角色" @change="handleRoleChange">
+            <a-select-option v-for="role in roleList" :key="role.id">
+              {{ role.name }}
+            </a-select-option>
+          </a-select>
         </a-form-item>
         <a-form-item label="备注">
           <a-input v-model="form.remarks" />
@@ -26,6 +33,7 @@
 <script>
 import notification from 'ant-design-vue/es/notification'
 import { savePermission } from '@/api/permission'
+import { getRoleList } from '@/api/role'
 export default {
   name: 'AddRole',
   data () {
@@ -45,12 +53,36 @@ export default {
       confirmLoading: false,
       form: {
         permissionName: '',
-        actions: '',
+        perCode: '',
+        roleId: '',
         remarks: ''
       }
     }
   },
+ mounted () {
+    this.getRoleList()
+  },
   methods: {
+    handleRoleChange (value) {
+      this.form.roleId = value
+    },
+    getRoleList () {
+      const that = this
+      getRoleList()
+        .then((res) => {
+          if (res.code === -1) {
+            notification.error({
+              message: '错误信息',
+              description: res.message
+            })
+          } else {
+            that.roleList = res.data.data
+          }
+        })
+        .finally(() => {
+           that.confirmLoading = false
+        })
+    },
     edit (record) {
       this.visible = true
       this.mdl = record
@@ -60,7 +92,8 @@ export default {
       this.visible = true
       this.form = {
         permissionName: '',
-        actions: '',
+        perCode: '',
+        roleId: '',
         remarks: ''
       }
     },
@@ -86,7 +119,8 @@ export default {
     handleCancel () {
       this.form = {
         name: '',
-        describe: '',
+        perCode: '',
+        roleId: '',
         remarks: ''
       }
       this.visible = false

@@ -110,7 +110,7 @@ export default {
     add () {
       this.visible = true
       this.form = {
-        category: '',
+        category: '[]',
         title: '',
         info: '',
         cover: '',
@@ -142,7 +142,7 @@ export default {
     },
     handleCancel () {
       this.form = {
-        category: '',
+        category: '[]',
         title: '',
         info: '',
         cover: '',

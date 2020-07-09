@@ -10,8 +10,8 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <span class="table-page-search-submitButtons">
-             <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-             <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
+              <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
+              <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
             </span>
           </a-col>
         </a-row>
@@ -21,7 +21,7 @@
       <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
       <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
-          <a-menu-item  @click="handleDelete"><a-icon type="delete" />删除</a-menu-item>
+          <a-menu-item @click="handleDelete"><a-icon type="delete" />删除</a-menu-item>
         </a-menu>
         <a-button style="margin-left: 8px">
           批量操作 <a-icon type="down" />
@@ -75,6 +75,14 @@ export default {
         {
           title: '权限名称',
           dataIndex: 'permissionName'
+        },
+        {
+          title: '权限代码',
+          dataIndex: 'perCode'
+        },
+        {
+          title: '所属角色',
+          dataIndex: 'role'
         },
         {
           title: '更新时间',

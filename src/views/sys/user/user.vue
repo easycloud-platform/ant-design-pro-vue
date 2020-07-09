@@ -8,12 +8,12 @@
               <a-input v-model="queryParam.name" placeholder=""/>
             </a-form-item>
           </a-col>
-           <a-col :md="8" :sm="24">
+          <a-col :md="8" :sm="24">
             <a-form-item label="手机号">
               <a-input v-model="queryParam.phone" placeholder=""/>
             </a-form-item>
           </a-col>
-           <a-col :md="8" :sm="24">
+          <a-col :md="8" :sm="24">
             <a-form-item label="邮箱">
               <a-input v-model="queryParam.email" placeholder=""/>
             </a-form-item>
@@ -36,7 +36,7 @@
       <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
       <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
-          <a-menu-item key="1"  @click="handleDelete"><a-icon type="delete" />删除</a-menu-item>
+          <a-menu-item key="1" @click="handleDelete"><a-icon type="delete" />删除</a-menu-item>
         </a-menu>
         <a-button style="margin-left: 8px">
           批量操作 <a-icon type="down" />
@@ -58,13 +58,13 @@
         <a-avatar :src="avatar" />
       </span>
       <span slot="status" slot-scope="status">
-          <a-badge :status="status ? 'success':'error'" :text="status ? '':''" />
+        <a-badge :status="status ? 'success':'error'" :text="status ? '':''" />
       </span>
       <span slot="action" slot-scope="text, record">
         <template>
           <a @click="handleEdit(record)">编辑</a>
           <a-divider type="vertical" />
-          <a @click="handleSub(record)">{{record.status ? '停用':'启用'}}</a>
+          <a @click="handleSub(record)">{{ record.status ? '停用':'启用' }}</a>
         </template>
       </span>
     </s-table>
@@ -129,10 +129,6 @@
             }
           },
           {
-            title: '所属角色',
-            dataIndex: 'role.name'
-          },
-          {
             title: '手机号',
             dataIndex: 'phone'
           },
@@ -146,12 +142,16 @@
             dataIndex: 'email'
           },
           {
+            title: '来源',
+            dataIndex: 'origin'
+          },
+          {
             title: '更新时间',
             dataIndex: 'updateDate'
           },
           {
             fixed: 'right',
-            width: 100,
+            width: 150,
             title: '操作',
             dataIndex: 'action',
             scopedSlots: { customRender: 'action' }

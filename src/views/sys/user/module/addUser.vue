@@ -33,6 +33,13 @@
             <a-form-item label="姓名">
               <a-input v-model="form.name" />
             </a-form-item>
+            <a-form-item label="角色">
+              <a-select mode="tags" v-model="roleId" style="width: 100%" placeholder="选择角色" @change="handleRoleChange">
+                <a-select-option v-for="role in roleList" :key="role.id">
+                  {{ role.name }}
+                </a-select-option>
+              </a-select>
+            </a-form-item>
             <a-form-item label="邮箱">
               <a-input v-model="form.email" />
             </a-form-item>
@@ -61,9 +68,6 @@
           </a-form-item>
         </a-form>
       </a-tab-pane>
-      <a-tab-pane key="3" tab="第三方登录">
-        Content of Tab 3
-      </a-tab-pane>
     </a-tabs>
   </a-modal>
 </template>
@@ -71,6 +75,7 @@
 <script>
 import notification from 'ant-design-vue/es/notification'
 import { saveUser } from '@/api/user'
+import { getRoleList } from '@/api/role'
 export default {
   name: 'AddUser',
   data () {
@@ -90,30 +95,57 @@ export default {
       password: '',
       newPassword: '',
       confirmLoading: false,
+      roleId: [],
       form: {
         name: '',
         avatar: '',
         email: '',
         phone: '',
+        roleId: '[]',
         password: '',
         loginName: '',
         address: '',
         remarks: ''
-
-      }
+      },
+      roleList: []
     }
   },
+  mounted () {
+    this.getRoleList()
+  },
   methods: {
+    handleRoleChange (value) {
+      this.form.roleId = JSON.stringify(value)
+    },
+    getRoleList () {
+      const that = this
+      getRoleList()
+        .then((res) => {
+          if (res.code === -1) {
+            notification.error({
+              message: '错误信息',
+              description: res.message
+            })
+          } else {
+            that.roleList = res.data.data
+          }
+        })
+        .finally(() => {
+           that.confirmLoading = false
+        })
+    },
     edit (record) {
       this.visible = true
       this.mdl = record
       this.form = JSON.parse(JSON.stringify(record))
+      this.roleId = JSON.parse(this.form.roleId)
     },
     add () {
       this.visible = true
       this.form = {
         name: '',
         avatar: '',
+        roleId: '[]',
         email: '',
         phone: '',
         password: '',
@@ -154,11 +186,13 @@ export default {
         avatar: '',
         email: '',
         phone: '',
+        roleId: '[]',
         password: '',
         loginName: '',
         address: '',
         remarks: ''
       }
+      this.roleId = []
       this.visible = false
     },
     handleChange (info) {

@@ -154,9 +154,9 @@ export default {
         age: '',
         sex: '',
         price: '',
-        photo: [],
+        photo: '[]',
         info: '',
-        video: [],
+        video: '[]',
         remarks: '',
         store: {
           id: ''
@@ -194,9 +194,9 @@ export default {
         age: '',
         sex: '',
         price: '',
-        photo: [],
+        photo: '[]',
         info: '',
-        video: [],
+        video: '[]',
         remarks: '',
         store: {
           id: ''
