@@ -16,16 +16,16 @@
             :before-upload="beforeUpload"
             @change="handleChange"
             >
-          <p class="ant-upload-drag-icon">
-            <a-icon type="inbox" />
-          </p>
-          <p class="ant-upload-text">
-            Click or drag file to this area to upload
-          </p>
-          <p class="ant-upload-hint">
-            Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-                band files
-          </p>
+        <p class="ant-upload-drag-icon">
+          <a-icon type="inbox" />
+        </p>
+        <p class="ant-upload-text">
+          Click or drag file to this area to upload
+        </p>
+        <p class="ant-upload-hint">
+          Support for a single or bulk upload. Strictly prohibit from uploading company data or other
+              band files
+        </p>
       </a-upload>
     </a-spin>
   </a-modal>
