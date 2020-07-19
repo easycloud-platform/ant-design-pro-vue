@@ -22,7 +22,7 @@
           <a href="_self">条款</a>
         </div> -->
         <div class="copyright">
-          Copyright &copy; 2020 李前
+          Copyright &copy; 2020 鹏航科技
         </div>
       </div>
       <div id="pointContainer"></div>
