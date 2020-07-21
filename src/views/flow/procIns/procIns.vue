@@ -12,7 +12,7 @@
         <a-input-search style="margin-left: 16px; width: 272px;" />
       </div>
 
-      <a-list size="large" :loading="loading" :pagination="{showSizeChanger: false, showQuickJumper: true, pageSize: pageSize, total: total}">
+      <a-list size="large"  :loading="loading" :pagination="{showSizeChanger: false, showQuickJumper: true, pageSize: pageSize, total: total}">
         <a-list-item :key="index" v-for="(item, index) in data">
           <a-list-item-meta :description="item.processInstanceId">
             <a slot="title">{{ item.name }}</a>
@@ -51,9 +51,9 @@
       </a-list>
     </a-card>
     <a-modal v-model="modelImagedialogVisible">
-      <div class="bmpn-containers" ref="content">
-        <div class="canvas" id="canvas" ref="canvas"></div>
-      </div>
+       <div class="bmpn-containers" ref="content">
+          <div class="canvas" id="canvas" ref="canvas"></div>
+        </div>
     </a-modal>
   </div>
 </template>

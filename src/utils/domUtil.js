@@ -16,4 +16,4 @@ export const setDocumentTitle = function (title) {
   }
 }
 
-export const domTitle = 'EasyBoot'
+export const domTitle = 'Ant Design Pro'
