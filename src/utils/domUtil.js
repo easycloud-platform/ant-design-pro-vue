@@ -16,4 +16,4 @@ export const setDocumentTitle = function (title) {
   }
 }
 
-export const domTitle = '漓江风景名胜区综合执法司法虚拟仿真实验'
+export const domTitle = 'Ant Design Pro'

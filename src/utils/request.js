@@ -44,15 +44,20 @@ service.interceptors.request.use(config => {
 
 // response interceptor
 service.interceptors.response.use((response) => {
-  if (response.data.code === 500) {
+  if (response.data.code === 401) {
     notification.error({
-      message: '服务器出小差了',
+      message: '身份验证失败',
       description: response.data.message
     })
+    store.dispatch('Logout').then(() => {
+      setTimeout(() => {
+        window.location.reload()
+      }, 1500)
+    })
   }
-  if (response.data.code === 401) {
-    notification.warning({
-      message: '权限不足',
+  if (response.data.code === 500) {
+    notification.error({
+      message: '错误信息',
       description: response.data.message
     })
   }

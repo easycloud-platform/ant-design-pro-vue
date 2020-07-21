@@ -124,6 +124,12 @@ export const constantRouterMap = [
             meta: { title: '字典管理', keepAlive: true }
           },
           {
+            path: '/sys/parameter',
+            name: 'parameter',
+            component: () => import('@/views/sys/parameter/parameter'),
+            meta: { title: '系统配置', keepAlive: true, permission: [ 'user' ] }
+          },
+          {
             path: '/sys/file',
             name: 'file',
             component: () => import('@/views/sys/file/file'),
