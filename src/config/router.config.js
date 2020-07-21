@@ -76,12 +76,6 @@ export const constantRouterMap = [
             component: () => import('@/views/sys/user/user'),
             meta: { title: '用户管理', keepAlive: true }
           },
-          // {
-          //   path: '/sys/dept',
-          //   name: 'dept',
-          //   component: () => import('@/views/sys/dept/dept'),
-          //   meta: { title: '组织机构', keepAlive: true }
-          // },
           {
             path: '/sys/role',
             name: 'role',
@@ -93,33 +87,6 @@ export const constantRouterMap = [
             name: 'permission',
             component: () => import('@/views/sys/permission/permission'),
             meta: { title: '权限管理', keepAlive: true }
-          }
-        ]
-      },
-       // flowable
-       {
-        path: '/flowable',
-        redirect: '/flowable/design',
-        component: PageView,
-        meta: { title: '流程管理', icon: 'schedule' },
-        children: [
-          {
-            path: '/flowable/procDef',
-            name: 'procDef',
-            component: () => import('@/views/flow/procDef/procDef'),
-            meta: { title: '流程定义', keepAlive: true }
-          },
-          {
-            path: '/flowable/procIns',
-            name: 'procIns',
-            component: () => import('@/views/flow/procIns/procIns'),
-            meta: { title: '流程实例', keepAlive: true }
-          },
-          {
-            path: '/flowable/design',
-            name: 'Design',
-            component: () => import('@/views/flow/design/design'),
-            meta: { title: '模型设计', keepAlive: true }
           }
         ]
       },
@@ -141,11 +108,6 @@ export const constantRouterMap = [
             name: 'task',
             component: () => import('@/views/sys/monitor/task/task'),
             meta: { title: '定时任务', keepAlive: true }
-          },
-          {
-            path: 'http://106.15.102.223:9180/doc.html',
-            name: 'doc',
-            meta: { title: '接口文档', target: '_blank' }
           }
         ]
       },
@@ -166,44 +128,6 @@ export const constantRouterMap = [
             name: 'file',
             component: () => import('@/views/sys/file/file'),
             meta: { title: '文件管理', keepAlive: true, permission: [ 'user' ] }
-          }
-        ]
-      },
-      {
-        path: '/app',
-        redirect: '/app/cat/level',
-        component: RouteView,
-        meta: { title: '猫星球', icon: 'gold' },
-        children: [
-          {
-            path: '/app/article',
-            name: 'article',
-            component: () => import('@/views/app/article/article'),
-            meta: { title: '文章管理', keepAlive: true }
-          },
-          {
-            path: '/app/store',
-            name: 'store',
-            component: () => import('@/views/app/store/store'),
-            meta: { title: '猫店管理', keepAlive: true }
-          },
-          {
-            path: '/app/cat/cat',
-            name: 'cat',
-            component: () => import('@/views/app/cat/cat/cat'),
-            meta: { title: '猫咪管理' }
-          },
-          {
-            path: '/app/cat/level',
-            name: 'level',
-            component: () => import('@/views/app/cat/level/level'),
-            meta: { title: '等级设置' }
-          },
-          {
-            path: '/app/cat/breed',
-            name: 'breed',
-            component: () => import('@/views/app/cat/breed/breed'),
-            meta: { title: '品种介绍' }
           }
         ]
       }
