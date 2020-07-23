@@ -4,14 +4,29 @@
       <a-form layout="inline">
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
-            <a-form-item label="配置项">
-              <a-input placeholder="请输入" v-model="queryParam.name"/>
+            <a-form-item label="文章标题">
+              <a-input placeholder="请输入" v-model="queryParam.title"/>
+            </a-form-item>
+          </a-col>
+          <a-col :md="8" :sm="24">
+            <a-form-item label="类别">
+              <a-select
+                placeholder="选择文章类别"
+                option-filter-prop="children"
+                style="width: 200px"
+                allowClear="true"
+                @change="handleArticleTypeChange"
+              >
+                <a-select-option v-for="i in articleTypeList" :key="i.value">
+                  {{ i.name }}
+                </a-select-option>
+              </a-select>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
             <span class="table-page-search-submitButtons">
-             <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-             <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
+              <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
+              <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
             </span>
           </a-col>
         </a-row>
@@ -21,7 +36,7 @@
       <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
       <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
-          <a-menu-item  @click="handleDelete"><a-icon type="delete" />删除</a-menu-item>
+          <a-menu-item @click="handleDelete"><a-icon type="delete" />删除</a-menu-item>
         </a-menu>
         <a-button style="margin-left: 8px">
           批量操作 <a-icon type="down" />
@@ -38,25 +53,39 @@
       :rowSelection="options.rowSelection"
       showPagination="auto"
     >
+      <span slot="cover" slot-scope="cover">
+        <a-avatar :src="cover" shape="square"/>
+      </span>
+      <span slot="appTitle" slot-scope="text, record">
+        <a-popover :title="record.title">
+          <template slot="content">
+            <div v-html="record.content"></div>
+          </template>
+          <a-button type="link">
+            {{ record.title }}
+          </a-button>
+        </a-popover>
+      </span>
       <span slot="action" slot-scope="text, record">
         <a @click="$refs.modal.edit(record)">编辑</a>
       </span>
     </s-table>
 
-    <add-parameter ref="modal" @ok="handleOk"></add-parameter>
+    <add-article ref="modal" @ok="handleOk"></add-article>
 
   </a-card>
 </template>
 
 <script>
 import { STable, Ellipsis } from '@/components'
-import addParameter from './module/addParameter'
-import { getParameterList, deleteParameter } from '@/api/parameter'
+import addArticle from './module/addArticle'
+import { getArticleList, deleteArticle } from '@/api/app/article'
+import { getDictListByCode } from '@/api/dict'
 export default {
-  name: 'Parameter',
+  name: 'Article',
   components: {
     STable,
-    addParameter,
+    addArticle,
     Ellipsis
   },
   data () {
@@ -68,26 +97,36 @@ export default {
       advanced: false,
       // 查询参数
       queryParam: {
-        name: ''
+        title: '',
+        category: ''
       },
       // 表头
       columns: [
         {
-          title: '配置编码',
-          dataIndex: 'code'
+          title: '封面',
+          dataIndex: 'cover',
+          scopedSlots: { customRender: 'cover' }
         },
         {
-          title: '配置项',
-          dataIndex: 'name'
+          title: '标题',
+          dataIndex: 'appTitle',
+          scopedSlots: { customRender: 'appTitle' }
         },
         {
-          title: '配置值',
-          dataIndex: 'value'
+          title: '类别',
+          dataIndex: 'categoryName'
+        },
+        {
+          title: '收藏数量',
+          dataIndex: 'collectCount'
+        },
+        {
+          title: '点赞数量',
+          dataIndex: 'likeCount'
         },
         {
           title: '更新时间',
-          dataIndex: 'updateDate',
-          sorter: true
+          dataIndex: 'updateDate'
         }, {
           title: '操作',
           width: '150px',
@@ -95,10 +134,11 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ],
+      articleTypeList: [],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         console.log('loadData.parameter', parameter)
-        return getParameterList(Object.assign(parameter, this.queryParam))
+        return getArticleList(Object.assign(parameter, this.queryParam))
           .then(res => {
           return res.data
         })
@@ -118,8 +158,17 @@ export default {
   },
   created () {
     this.tableOption()
+    this.getArticleTypeList()
   },
   methods: {
+    getArticleTypeList () {
+       getDictListByCode('app-article-type').then((res) => {
+        this.articleTypeList = res.data
+      })
+    },
+    handleArticleTypeChange (value) {
+      this.queryParam.category = value
+    },
     tableOption () {
       if (!this.optionAlertShow) {
         this.options = {
@@ -152,12 +201,10 @@ export default {
         okText: '确认',
         cancelText: '取消',
         onOk () {
-          deleteParameter(that.selectedRowKeys).then(res => {
+          deleteArticle(that.selectedRowKeys).then(res => {
             if (res.code === 200) {
               that.$message.success('操作成功')
               that.handleOk()
-            } else {
-              that.$message.error(res.message)
             }
           })
         }
@@ -175,18 +222,6 @@ export default {
     }
   },
   watch: {
-    /*
-      'selectedRows': function (selectedRows) {
-        this.needTotalList = this.needTotalList.map(item => {
-          return {
-            ...item,
-            total: selectedRows.reduce( (sum, val) => {
-              return sum + val[item.dataIndex]
-            }, 0)
-          }
-        })
-      }
-      */
   }
 }
 </script>

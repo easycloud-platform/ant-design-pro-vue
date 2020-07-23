@@ -2,7 +2,7 @@
   <div class="footer">
     <div class="copyright">
       Copyright
-      <a-icon type="copyright" /> 2020 <span>鹏航科技</span>
+      <a-icon type="copyright" /> 2020 <span>李前</span>
     </div>
   </div>
 </template>

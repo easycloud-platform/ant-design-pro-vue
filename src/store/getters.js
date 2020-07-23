@@ -12,7 +12,7 @@ const getters = {
   addRouters: state => state.permission.addRouters,
   multiTab: state => state.app.multiTab,
   lang: state => state.i18n.lang,
-  appTitle: state => '漓江风景名胜区综合执法司法虚拟仿真实验'
+  appTitle: state => 'EasyBoot'
 }
 
 export default getters

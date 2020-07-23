@@ -12,7 +12,7 @@
         <a-button type="dashed" style="width: 100%" icon="plus" @click="$refs.taskForm.add()">部署流程</a-button>
       </div>
 
-      <a-list size="large"  :loading="loading" :pagination="{showSizeChanger: false, showQuickJumper: true, pageSize: pageSize, total: total}">
+      <a-list size="large" :loading="loading" :pagination="{showSizeChanger: false, showQuickJumper: true, pageSize: pageSize, total: total}">
         <a-list-item :key="index" v-for="(item, index) in data">
           <a-list-item-meta :description="item.category">
             <a slot="title">{{ item.name }}</a>

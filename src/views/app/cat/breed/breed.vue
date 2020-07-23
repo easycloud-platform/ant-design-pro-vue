@@ -4,7 +4,7 @@
       <a-form layout="inline">
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
-            <a-form-item label="配置项">
+            <a-form-item label="品种名称">
               <a-input placeholder="请输入" v-model="queryParam.name"/>
             </a-form-item>
           </a-col>
@@ -43,20 +43,20 @@
       </span>
     </s-table>
 
-    <add-parameter ref="modal" @ok="handleOk"></add-parameter>
+    <add-breed ref="modal" @ok="handleOk"></add-breed>
 
   </a-card>
 </template>
 
 <script>
 import { STable, Ellipsis } from '@/components'
-import addParameter from './module/addParameter'
-import { getParameterList, deleteParameter } from '@/api/parameter'
+import addBreed from './module/addBreed'
+import { getCatBreedList, deleteCatBreed } from '@/api/app/catBreed'
 export default {
-  name: 'Parameter',
+  name: 'Breed',
   components: {
     STable,
-    addParameter,
+    addBreed,
     Ellipsis
   },
   data () {
@@ -73,16 +73,28 @@ export default {
       // 表头
       columns: [
         {
-          title: '配置编码',
-          dataIndex: 'code'
-        },
-        {
-          title: '配置项',
+          title: '品种',
           dataIndex: 'name'
         },
         {
-          title: '配置值',
-          dataIndex: 'value'
+          title: '寿命',
+          dataIndex: 'life'
+        },
+        {
+          title: '市场价',
+          dataIndex: 'price'
+        },
+        {
+          title: '体重',
+          dataIndex: 'weight'
+        },
+        {
+          title: '高',
+          dataIndex: 'height'
+        },
+        {
+          title: '产地',
+          dataIndex: 'origin'
         },
         {
           title: '更新时间',
@@ -98,7 +110,7 @@ export default {
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         console.log('loadData.parameter', parameter)
-        return getParameterList(Object.assign(parameter, this.queryParam))
+        return getCatBreedList(Object.assign(parameter, this.queryParam))
           .then(res => {
           return res.data
         })
@@ -152,12 +164,10 @@ export default {
         okText: '确认',
         cancelText: '取消',
         onOk () {
-          deleteParameter(that.selectedRowKeys).then(res => {
+          deleteCatBreed(that.selectedRowKeys).then(res => {
             if (res.code === 200) {
               that.$message.success('操作成功')
               that.handleOk()
-            } else {
-              that.$message.error(res.message)
             }
           })
         }
@@ -175,18 +185,6 @@ export default {
     }
   },
   watch: {
-    /*
-      'selectedRows': function (selectedRows) {
-        this.needTotalList = this.needTotalList.map(item => {
-          return {
-            ...item,
-            total: selectedRows.reduce( (sum, val) => {
-              return sum + val[item.dataIndex]
-            }, 0)
-          }
-        })
-      }
-      */
   }
 }
 </script>
