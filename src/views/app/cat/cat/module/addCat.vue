@@ -26,6 +26,33 @@
             {{ item }}
           </a-checkable-tag>
         </a-form-item>
+         <a-form-item label="标签">
+           <template v-for="(tag, index) in tags">
+            <a-tooltip v-if="tag.length > 20" :key="tag" :title="tag">
+              <a-tag :key="tag" :closable="index !== 0" @close="() => handleClose(tag)">
+                {{ `${tag.slice(0, 20)}...` }}
+              </a-tag>
+            </a-tooltip>
+            <a-tag v-else :key="tag" :closable="index !== 0" @close="() => handleClose(tag)">
+              {{ tag }}
+            </a-tag>
+          </template>
+            <a-input
+              v-if="inputVisible"
+              ref="input"
+              type="text"
+              size="small"
+              :style="{ width: '78px' }"
+              :value="inputValue"
+              @change="handleInputChange"
+              @blur="handleInputConfirm"
+              @keyup.enter="handleInputConfirm"
+            />
+            <a-tag v-else style="background: #fff; borderStyle: dashed;" @click="showInput">
+              <a-icon type="plus" /> 添加标签
+            </a-tag>
+          <a-input v-model="form.name" />
+        </a-form-item>
         <a-form-item label="猫咪昵称">
           <a-input v-model="form.name" />
         </a-form-item>
@@ -83,6 +110,9 @@ export default {
   name: 'AddCat',
   data () {
     return {
+      tags: [],
+      inputVisible: false,
+      inputValue: '',
       tabPosition: 'left',
       labelCol: {
         xs: { span: 24 },
@@ -103,6 +133,7 @@ export default {
         weight: '',
         age: '',
         sex: '',
+        tags: '[]',
         price: '',
         photo: '',
         info: '',
@@ -123,6 +154,31 @@ export default {
     this.initData()
   },
   methods: {
+    handleClose (removedTag) {
+      const tags = this.tags.filter(tag => tag !== removedTag)
+      this.tags = tags
+    },
+    showInput () {
+      this.inputVisible = true
+      this.$nextTick(function () {
+        this.$refs.input.focus()
+      })
+    },
+    handleInputChange (e) {
+      this.inputValue = e.target.value
+    },
+    handleInputConfirm () {
+      const inputValue = this.inputValue
+      let tags = this.tags
+      if (inputValue && tags.indexOf(inputValue) === -1) {
+        tags = [...tags, inputValue]
+      }
+      Object.assign(this, {
+        tags,
+        inputVisible: false,
+        inputValue: ''
+      })
+    },
     initData () {
       getStoreList().then((res) => {
         this.storeList = res.data.data
@@ -141,6 +197,7 @@ export default {
       this.visible = true
       this.mdl = record
       this.form = JSON.parse(JSON.stringify(record))
+      this.tags = JSON.parse(this.form.tags)
       this.photo = JSON.parse(this.form.photo)
       this.video = JSON.parse(this.form.video)
     },
@@ -148,6 +205,7 @@ export default {
       this.visible = true
       this.photo = []
       this.video = []
+      this.tags = []
       this.form = {
         name: '',
         weight: '',
@@ -156,6 +214,7 @@ export default {
         price: '',
         photo: '[]',
         info: '',
+        tags: '[]',
         video: '[]',
         remarks: '',
         store: {
@@ -171,6 +230,7 @@ export default {
        that.confirmLoading = true
        this.form.photo = JSON.stringify(this.photo)
        this.form.video = JSON.stringify(this.video)
+       this.form.tags = JSON.stringify(this.tags)
        saveCat(this.form)
         .then((res) => {
          if (res.code === -1) {
@@ -196,6 +256,7 @@ export default {
         price: '',
         photo: '[]',
         info: '',
+        tags: '[]',
         video: '[]',
         remarks: '',
         store: {
