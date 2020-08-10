@@ -218,6 +218,20 @@ export const constantRouterMap = [
             meta: { title: '品种介绍' }
           }
         ]
+      },
+      {
+        path: '/miniprogram',
+        redirect: '/miniprogram/banner',
+        component: RouteView,
+        meta: { title: '小程序管理', icon: 'tool' },
+        children: [
+          {
+            path: '/miniprogram/banner',
+            name: 'banner',
+            component: () => import('@/views/app/banner/banner'),
+            meta: { title: '轮播图管理', keepAlive: true }
+          }
+        ]
       }
     ]
   },
