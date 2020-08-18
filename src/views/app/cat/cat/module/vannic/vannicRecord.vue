@@ -1,10 +1,17 @@
 <template>
-  <a-card :bordered="false">
+  <a-modal
+    title="疫苗记录"
+    :width="640"
+    :visible="visible"
+    :confirmLoading="confirmLoading"
+    @cancel="handleCancel"
+    :footer="null"
+  >
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
-            <a-form-item label="猫咪昵称">
+            <a-form-item label="疫苗名称">
               <a-input placeholder="请输入" v-model="queryParam.name"/>
             </a-form-item>
           </a-col>
@@ -17,7 +24,7 @@
         </a-row>
       </a-form>
     </div>
-    <div class="table-operator">
+     <div class="table-operator">
       <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
       <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
@@ -35,35 +42,27 @@
       :columns="columns"
       :data="loadData"
       :alert="options.alert"
-      :scroll="{ x: 1500, y: 300 }"
       :rowSelection="options.rowSelection"
       showPagination="auto"
     >
       <span slot="action" slot-scope="text, record">
-        <a @click="$refs.modal.edit(record)">编辑资料</a>
+        <a @click="$refs.addVannicRecord.edit(record)">编辑</a>
         <a-divider type="vertical" />
-        <a @click="$refs.vannicRecord.vannic(record)">疫苗记录</a>
-        <a-divider type="vertical" />
-        <a @click="$refs.modal.edit(record)">驱虫记录</a>
       </span>
     </s-table>
-
-    <add-cat ref="modal" @ok="handleOk"></add-cat>
-    <vannic-record ref="vannicRecord"></vannic-record>
-  </a-card>
+    <add-vannicRecord ref="addVannicRecord"></add-vannicRecord>
+  </a-modal>
 </template>
 
 <script>
 import { STable, Ellipsis } from '@/components'
-import addCat from './module/addCat'
-import vannicRecord from './module/vannic/vannicRecord'
-import { getCatList, deleteCat } from '@/api/app/cat'
+import addVannicRecord from './module/addVannicRecord'
+import { getVaccinList, deleteVaccin } from '@/api/app/vaccin'
 export default {
-  name: 'Cat',
+  name: 'VannicRecord',
   components: {
     STable,
-    vannicRecord,
-    addCat,
+    addVannicRecord,
     Ellipsis
   },
   data () {
@@ -75,68 +74,33 @@ export default {
       advanced: false,
       // 查询参数
       queryParam: {
-        name: ''
+        name: '',
+        catId: ''
       },
       // 表头
       columns: [
         {
-          title: '猫咪',
-          dataIndex: 'name',
-          fixed: 'left',
-          width: '100px'
+          title: '疫苗名称',
+          dataIndex: 'name'
         },
         {
-          title: '商店',
-          width: '100px',
-          dataIndex: 'store.name'
-        },
-        {
-          title: '品种',
-          width: '100px',
-          dataIndex: 'catBreed.name'
-        },
-        {
-          title: '介绍',
-          width: '100px',
+          title: '疫苗描述',
           dataIndex: 'info'
         },
         {
-          title: '体重',
-          width: '100px',
-          dataIndex: 'weight'
+          title: '使用药物',
+          dataIndex: 'medicine'
         },
         {
-          title: '年龄',
-          width: '100px',
-          dataIndex: 'age'
-        },
-        {
-          title: '性别',
-          width: '100px',
-          dataIndex: 'sex'
-        },
-        {
-          title: '市场价',
-          width: '100px',
-          dataIndex: 'price'
-        },
-        {
-          title: '更新时间',
-          dataIndex: 'updateDate',
-          width: '200px',
-          sorter: true
-        }, {
           title: '操作',
-          width: '240px',
           dataIndex: 'action',
-          fixed: 'right',
           scopedSlots: { customRender: 'action' }
         }
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         console.log('loadData.parameter', parameter)
-        return getCatList(Object.assign(parameter, this.queryParam))
+        return getVaccinList(Object.assign(parameter, this.queryParam))
           .then(res => {
           return res.data
         })
@@ -154,33 +118,17 @@ export default {
       optionAlertShow: false
     }
   },
-  created () {
-    this.tableOption()
-  },
   methods: {
-    tableOption () {
-      if (!this.optionAlertShow) {
-        this.options = {
-          alert: { show: true, clear: () => { this.selectedRowKeys = [] } },
-          rowSelection: {
-            selectedRowKeys: this.selectedRowKeys,
-            onChange: this.onSelectChange
-          }
-        }
-        this.optionAlertShow = true
-      } else {
-        this.options = {
-          alert: false,
-          rowSelection: null
-        }
-        this.optionAlertShow = false
-      }
+    vannic (record) {
+      this.queryParam.catId = record.id
+      this.visible = true
+    },
+    handleClose (removedTag) {
+      const tags = this.tags.filter(tag => tag !== removedTag)
+      this.tags = tags
     },
     handleAdd () {
-      this.$refs.modal.add()
-    },
-    handleEdit (record) {
-      this.$refs.modal.edit(record)
+      this.$refs.addVannicRecord.add(this.queryParam.catId)
     },
     handleDelete () {
       const that = this
@@ -190,7 +138,7 @@ export default {
         okText: '确认',
         cancelText: '取消',
         onOk () {
-          deleteCat(that.selectedRowKeys).then(res => {
+          deleteVaccin(that.selectedRowKeys).then(res => {
             if (res.code === 200) {
               that.$message.success('操作成功')
               that.handleOk()
@@ -208,9 +156,29 @@ export default {
     },
     handleOk () {
       this.$refs.table.refresh()
+    },
+    handleCancel () {
+      this.visible = false
     }
-  },
-  watch: {
   }
 }
 </script>
+<style>
+  .avatar-uploader > .ant-upload {
+    width: 128px;
+    height: 128px;
+  }
+  img{
+    width: 128px;
+    height: 128px;
+  }
+  .ant-upload-select-picture-card i {
+    font-size: 32px;
+    color: #999;
+  }
+
+  .ant-upload-select-picture-card .ant-upload-text {
+    margin-top: 8px;
+    color: #666;
+  }
+</style>
