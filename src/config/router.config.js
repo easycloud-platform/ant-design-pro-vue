@@ -96,33 +96,6 @@ export const constantRouterMap = [
           }
         ]
       },
-       // flowable
-       {
-        path: '/flowable',
-        redirect: '/flowable/design',
-        component: PageView,
-        meta: { title: '流程管理', icon: 'schedule' },
-        children: [
-          {
-            path: '/flowable/procDef',
-            name: 'procDef',
-            component: () => import('@/views/flow/procDef/procDef'),
-            meta: { title: '流程定义', keepAlive: true }
-          },
-          {
-            path: '/flowable/procIns',
-            name: 'procIns',
-            component: () => import('@/views/flow/procIns/procIns'),
-            meta: { title: '流程实例', keepAlive: true }
-          },
-          {
-            path: '/flowable/design',
-            name: 'Design',
-            component: () => import('@/views/flow/design/design'),
-            meta: { title: '模型设计', keepAlive: true }
-          }
-        ]
-      },
        // 系统监控
        {
         path: '/monitor',
@@ -178,6 +151,12 @@ export const constantRouterMap = [
             name: 'file',
             component: () => import('@/views/sys/file/file'),
             meta: { title: '文件管理', keepAlive: true, permission: [ 'user' ] }
+          },
+          {
+            path: '/sys/message',
+            name: 'message',
+            component: () => import('@/views/sys/message/message'),
+            meta: { title: '消息管理', keepAlive: true }
           }
         ]
       },
